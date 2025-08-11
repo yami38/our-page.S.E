@@ -1,48 +1,174 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meine Erste Website</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            text-align: center;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edin & Sudenaz</title>
+
+<!-- Google Font für Schreibschrift -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<!-- Font Awesome für Herz-Icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: white;
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+    }
+
+    /* Kopfbereich */
+    header {
+        background-color: red;
+        color: pink;
+        font-family: 'Pacifico', cursive;
+        font-size: 2.5rem;
+        text-align: center;
+        padding: 20px;
+    }
+
+    header i {
+        color: pink;
+        margin: 0 10px;
+    }
+
+    /* Layout */
+    .container {
+        flex: 1;
+        display: flex;
+    }
+
+    /* Sidebar */
+    nav {
+        width: 220px;
+        background-color: rgba(0,0,0,0.7);
+        padding: 20px;
+    }
+
+    nav h3 {
+        color: #ffb6c1;
+        border-bottom: 1px solid #ffb6c1;
+        padding-bottom: 5px;
+    }
+
+    nav a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        margin: 10px 0;
+    }
+
+    nav a:hover {
+        color: #ffb6c1;
+    }
+
+    /* Hauptbereich */
+    main {
+        flex: 1;
+        padding: 40px;
+        background: url('background.jpg') center/cover no-repeat fixed;
+        position: relative;
+    }
+
+    /* Hintergrund abdunkeln für Lesbarkeit */
+    main::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .content {
+        position: relative;
+        z-index: 1;
+        font-size: 1.5rem;
+    }
+
+    /* Schreibmaschinen-Effekt */
+    .typing {
+        border-right: .15em solid #ffb6c1;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 0;
+        animation: typing 4s steps(30, end) forwards, blink .75s step-end infinite;
+    }
+
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+
+    @keyframes blink {
+        50% { border-color: transparent }
+    }
+
+    /* Footer */
+    footer {
+        background-color: rgba(0,0,0,0.8);
+        padding: 15px;
+        text-align: center;
+    }
+
+    footer a {
+        color: #ffb6c1;
+        margin: 0 10px;
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
         }
-        header {
-            background: #4CAF50;
-            color: white;
-            padding: 1rem 0;
+        nav {
+            width: 100%;
         }
-        main {
-            margin: 2rem auto;
-            max-width: 600px;
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        footer {
-            margin-top: 2rem;
-            color: #777;
-            font-size: 0.9rem;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Willkommen auf meiner Seite!</h1>
-    </header>
+
+<header>
+    <i class="fas fa-heart"></i>
+    Edin & Sudenaz
+    <i class="fas fa-heart"></i>
+</header>
+
+<div class="container">
+    <nav>
+        <h3>Menü</h3>
+        <a href="#">Startseite</a>
+        <a href="#">Brief 1</a>
+        <a href="#">Brief 2</a>
+        <a href="#">Brief 3</a>
+    </nav>
+
     <main>
-        <p>Hallo Welt! 🎉</p>
-        <p>Das ist meine erste Website mit GitHub Pages.</p>
-        <p>Viel Spaß beim Ausprobieren!</p>
+        <div class="content">
+            <div class="typing">Willkommen auf unserer besonderen Seite ❤️</div>
+        </div>
     </main>
-    <footer>
-        &copy; 2025 Meine Website
-    </footer>
+</div>
+
+<footer>
+    <a href="#">Entdecken</a> |
+    <a href="#">Einkaufen</a> |
+    <a href="#">Folgen</a> |
+    <a href="#">Kontaktieren</a>
+</footer>
+
+<script>
+    // Optional: Wenn du mehrere Texte nacheinander tippen lassen willst
+    // kannst du diesen Abschnitt anpassen
+</script>
+
 </body>
 </html>
