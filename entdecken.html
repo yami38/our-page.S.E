@@ -5,112 +5,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edin & Sudenaz</title>
 
-<!-- Google Font für romantische Schreibschrift -->
+<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
-<!-- Font Awesome für Herz-Icon & Menü -->
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        body {
-            margin: 0;
-            padding-top: 90px;
-            font-family: Arial, sans-serif;
-            color: white;
-            display: flex;
-            min-height: 100vh;
-            flex-direction: column;
-        }
-        
-        header {
-            background-color: beige;
-            color: black;
-            font-family: 'Great Vibes', cursive;
-            font-size: 1.6rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-         }
-        header i {
-            color: brown;
-            font-size: 1.6rem;
-        }
-        
-        .container {
-            flex: 1;
-            display: flex;
-            margin-top: 100px; /* Platz unter Header */
-        }
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: beige;
+    font-family: Arial, sans-serif;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
-         /* Hauptbereich */
-        main {
-            flex: 1;
-            padding: 40px;
-            background: beige;
-            position: relative;
-        }
+header {
+    background-color: beige;
+    color: black;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
-        /* Hintergrund abdunkeln */
-        main::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0,0,0,0.3);
-        }
-        
-        .content {
-            position: relative;
-            z-index: 1;
-            font-size: 1.5rem;
-            text-align: center;
-        }
+header i {
+    color: brown;
+    font-size: 1.6rem;
+}
 
-         /* Footer */
-        footer {
-            background-color: rgba(0,0,0,0.8);
-            padding: 15px;
-            text-align: center;
-        }
-    
-        footer a {
-            color: #ffb6c1;
-            margin: 0 10px;
-            text-decoration: none;
-        }
-    
-        footer a:hover {
-            text-decoration: underline;
-        }
+header a {
+    font-family: 'Great Vibes', cursive;
+    color: brown;
+    text-decoration: none;
+}
 
-    </style>
+main {
+    flex: 1;
+    padding: 120px 40px 40px; /* 120px oben für Header-Abstand */
+    background-color: beige;
+    position: relative;
+}
 
+main::before {
+    content: none; /* Abdunkeln entfernt */
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    text-align: center;
+    color: black; /* Schwarzer Text für besseren Kontrast */
+}
+
+footer {
+    background-color: rgba(0,0,0,0.8);
+    padding: 15px;
+    text-align: center;
+}
+
+footer a {
+    color: #ffb6c1;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+</style>
 </head>
 <body>
-    <header>
-        <i class="fas fa-heart"></i>
-        <a href="index.html" style="color:brown; text-decoration:none; font-family:'Pacifico', cursive;">
-            Edin & Sudenaz
-        </a>
-        <i class="fas fa-heart"></i>
-    </header>
 
-    <main>
-        <h1>Entdecken</h1>
-        <p>Hier kannst du spannende Inhalte einfügen.</p>
-    </main>
+<header>
+    <i class="fas fa-heart"></i>
+    <a href="index.html">Edin & Sudenaz</a>
+    <i class="fas fa-heart"></i>
+</header>
 
-    <footer>
-        <a href="entdecken.html">Entdecken</a> | 
-        <a href="einkaufen.html">Einkaufen</a> |
-        <a href="kontaktieren.html">Kontaktieren</a> 
-    </footer>
+<main>
+    <h1 class="content">Entdecken</h1>
+    <p class="content">Hier kannst du spannende Inhalte einfügen.</p>
+</main>
+
+<footer>
+    <a href="entdecken.html">Entdecken</a> | 
+    <a href="einkaufen.html">Einkaufen</a> |
+    <a href="kontaktieren.html">Kontaktieren</a> 
+</footer>
+
 </body>
 </html>
-
