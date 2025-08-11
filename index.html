@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edin & Sudenaz</title>
 
-<!-- Google Font für Schreibschrift -->
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<!-- Google Font für romantische Schreibschrift -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
 <!-- Font Awesome für Herz-Icon & Menü -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
+    /* Browser-Standardabstände entfernen */
     html, body {
         margin: 0;
         padding: 0;
@@ -20,20 +21,20 @@
     }
 
     body {
-        margin: 0;
         font-family: Arial, sans-serif;
         color: white;
         display: flex;
-        min-height: 100vh;
         flex-direction: column;
+        min-height: 100vh;
+        background-color: #8b0000; /* Dunkelrot als Fallback-Hintergrund */
     }
 
     /* Kopfbereich */
     header {
-        background-color: brown;
+        background-color: #8b0000; /* Dunkelrot */
         color: pink;
-        font-family: 'Pacifico', cursive;
-        font-size: 2rem;
+        font-family: 'Great Vibes', cursive;
+        font-size: 2.2rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -44,6 +45,7 @@
         left: 0;
         width: 100%;
         z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.4);
     }
 
     header i {
@@ -62,11 +64,11 @@
         left: 15px;
     }
 
-    /* Layout */
+    /* Container unterhalb Header */
     .container {
         flex: 1;
         display: flex;
-        margin-top: 100px; /* Platz unter Header */
+        margin-top: 80px; /* Höhe Header */
     }
 
     /* Sidebar */
@@ -94,7 +96,6 @@
         color: #ffb6c1;
     }
 
-    /* Eingeklappt */
     nav.closed {
         transform: translateX(-100%);
     }
@@ -103,19 +104,22 @@
     main {
         flex: 1;
         padding: 40px;
-        background: url('images/back.jpg') center center / cover no-repeat fixed;
-        background-color: brown; 
-        min-height: calc(100vh - 80px); 
+        background: #8b0000 url('images/back.jpg') center center / cover no-repeat;
+        min-height: calc(100vh - 80px);
         position: relative;
+        overflow: hidden;
     }
 
-    /* Hintergrund abdunkeln */
-      main::before {
+    /* Weichzeichner und Abdunkeln */
+    main::before {
         content: "";
         position: absolute;
         inset: 0;
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(0,0,0,0.4);
+        backdrop-filter: blur(2px);
     }
+
+    /* Inhalt im Vordergrund */
     .content {
         position: relative;
         z-index: 1;
@@ -183,7 +187,7 @@
 <div class="container">
     <nav class="closed">
         <h3>Menü</h3>
-        <a href="#">Startseite</a>
+        <a href="index.html">Startseite</a>
         <a href="#">Brief 1</a>
         <a href="#">Brief 2</a>
         <a href="#">Brief 3</a>
@@ -196,12 +200,12 @@
     </main>
 </div>
 
-    <footer>
-      <a href="entdecken.html">Entdecken</a> | 
-      <a href="einkaufen.html">Einkaufen</a> |
-      <a href="kontaktieren.html">Kontaktieren</a> 
-    </footer>
-   
+<footer>
+  <a href="entdecken.html">Entdecken</a> | 
+  <a href="einkaufen.html">Einkaufen</a> |
+  <a href="kontaktieren.html">Kontaktieren</a> 
+</footer>
+
 <script>
 // Schreibmaschinen-Text
 const messages = [
