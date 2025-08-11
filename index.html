@@ -95,12 +95,15 @@
 
     /* Schreibmaschinen-Effekt */
     .typing {
-        border-right: .15em solid #ffb6c1;
-        white-space: nowrap;
-        overflow: hidden;
-        width: 0;
-        animation: typing 4s steps(30, end) forwards, blink .75s step-end infinite;
+    border-right: .15em solid #ffb6c1;
+    white-space: normal;         /* erlaubt Zeilenumbruch */
+    overflow: hidden;
+    max-width: 90%;              /* passt sich Bildschirmgröße an */
+    margin: 0 auto;              /* zentriert */
+    word-break: break-word;      /* bricht lange Wörter */
+    animation: typing 4s steps(30, end) forwards, blink .75s step-end infinite;
     }
+
 
     @keyframes typing {
         from { width: 0 }
