@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einkaufen</title>
+    <!-- Google Font für Schreibschrift -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Font Awesome für Herz-Icon & Menü -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+        <a href="index.html">
+            <i class="fas fa-heart"></i> Edin & Sudenaz <i class="fas fa-heart"></i>
+        </a>
+    </header>
+
+    <div class="container">
+        <nav class="closed">
+            <h3>Menü</h3>
+            <a href="index.html">Startseite</a>
+            <a href="brief1.html">Brief 1</a>
+            <a href="brief2.html">Brief 2</a>
+            <a href="brief3.html">Brief 3</a>
+        </nav>
+
+        <main>
+            <h1>Einkaufen</h1>
+            <p>Hier kannst du Inhalte über das Einkaufen einfügen.</p>
+        </main>
+    </div>
+
+    <footer>
+        <a href="entdecken.html">Entdecken</a> | 
+        <a href="einkaufen.html">Einkaufen</a> |
+        <a href="folgen.html">Folgen</a> | 
+        <a href="kontaktieren.html">Kontaktieren</a> 
+    </footer>
+
+    <script>
+        // Sidebar Toggle
+        const nav = document.querySelector('nav');
+        const toggleBtn = document.querySelector('.menu-toggle');
+        toggleBtn.addEventListener('click', () => {
+            nav.classList.toggle('closed');
+        });
+    </script>
+</body>
+</html>
