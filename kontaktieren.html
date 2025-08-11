@@ -1,52 +1,110 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kontaktieren</title>
-    <!-- Google Font für Schreibschrift -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <!-- Font Awesome für Herz-Icon & Menü -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edin & Sudenaz</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: snow;
+    font-family: Times New Roman, sans-serif;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: snow;
+    color: black;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+header i {
+    color: #8b0000;
+    font-size: 1.6rem;
+}
+
+header a {
+    font-family: 'Great Vibes', cursive;
+    color: #8b0000;
+    text-decoration: none;
+}
+
+main {
+    flex: 1;
+    padding: 120px 40px 40px; /* 120px oben für Header-Abstand */
+    background-color: snow;
+    position: relative;
+}
+
+main::before {
+    content: none; /* Abdunkeln entfernt */
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    text-align: center;
+    color: black; /* Schwarzer Text für besseren Kontrast */
+}
+
+footer {
+    background-color: rgba(0,0,0,0.8);
+    padding: 15px;
+    text-align: center;
+}
+
+footer a {
+    color: MistyRose;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+</style>
 </head>
 <body>
-    <header>
-        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
-        <a href="index.html">
-            <i class="fas fa-heart"></i> Edin & Sudenaz <i class="fas fa-heart"></i>
-        </a>
-    </header>
 
-    <div class="container">
-        <nav class="closed">
-            <h3>Menü</h3>
-            <a href="index.html">Startseite</a>
-            <a href="brief1.html">Brief 1</a>
-            <a href="brief2.html">Brief 2</a>
-            <a href="brief3.html">Brief 3</a>
-        </nav>
+<header>
+    <i class="fas fa-heart"></i>
+    <a href="index.html">Edin & Sudenaz</a>
+    <i class="fas fa-heart"></i>
+</header>
 
-        <main>
-            <h1>Kontaktieren</h1>
-            <p>Hier kannst du Inhalte über das Kontaktieren einfügen.</p>
-        </main>
-    </div>
+<main>
+    <h1 class="content">Kontaktieren</h1>
+    <p class="content">Hier kannst du Inhalte über das Kontaktieren einfügen.</p>
+</main>
 
-    <footer>
-        <a href="entdecken.html">Entdecken</a> | 
-        <a href="einkaufen.html">Einkaufen</a> |
-        <a href="folgen.html">Folgen</a> | 
-        <a href="kontaktieren.html">Kontaktieren</a> 
-    </footer>
+<footer>
+    <a href="entdecken.html">Entdecken</a> | 
+    <a href="einkaufen.html">Einkaufen</a> |
+    <a href="kontaktieren.html">Kontaktieren</a> 
+</footer>
 
-    <script>
-        // Sidebar Toggle
-        const nav = document.querySelector('nav');
-        const toggleBtn = document.querySelector('.menu-toggle');
-        toggleBtn.addEventListener('click', () => {
-            nav.classList.toggle('closed');
-        });
-    </script>
 </body>
 </html>
