@@ -47,7 +47,28 @@
             margin-top: 100px; /* Platz unter Header */
         }
 
+         /* Hauptbereich */
+        main {
+            flex: 1;
+            padding: 40px;
+            background: beige;
+            position: relative;
+        }
 
+        /* Hintergrund abdunkeln */
+        main::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            font-size: 1.5rem;
+            text-align: center;
+        }
     </style>
 
 </head>
