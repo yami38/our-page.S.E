@@ -96,19 +96,16 @@
     /* Schreibmaschinen-Effekt */
     .typing {
     border-right: .15em solid #ffb6c1;
-    white-space: normal;         /* erlaubt Zeilenumbruch */
+    white-space: normal;
     overflow: hidden;
-    max-width: 90%;              /* passt sich Bildschirmgröße an */
-    margin: 0 auto;              /* zentriert */
-    word-break: break-word;      /* bricht lange Wörter */
-    animation: typing 4s steps(30, end) forwards, blink .75s step-end infinite;
+    max-width: 90%;
+    margin: 0 auto;
+    word-break: break-word;
+    display: inline-block; /* wichtig: passt sich Textbreite an */
     }
 
 
-    @keyframes typing {
-        from { width: 0 }
-        to { width: 100% }
-    }
+
 
     @keyframes blink {
         50% { border-color: transparent }
