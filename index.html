@@ -29,11 +29,15 @@
         font-size: 2.5rem;
         text-align: center;
         padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     header i {
         color: pink;
-        margin: 0 10px;
     }
 
     /* Layout */
@@ -86,6 +90,7 @@
         position: relative;
         z-index: 1;
         font-size: 1.5rem;
+        text-align: center;
     }
 
     /* Schreibmaschinen-Effekt */
@@ -131,8 +136,18 @@
         nav {
             width: 100%;
         }
+        main {
+            min-height: 300px;
+        }
+        header {
+            font-size: 2rem;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 15px;
+        }
     }
 </style>
+
 </head>
 <body>
 
