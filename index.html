@@ -184,8 +184,33 @@
 </footer>
 
 <script>
-    // Optional: Wenn du mehrere Texte nacheinander tippen lassen willst
-    // kannst du diesen Abschnitt anpassen
+
+const messages = [
+    "Web siteme hoş geldin Edinim <3",
+    "Sana olan sevgim o kadar büyük ki, bunu bu sayfayla sana iletmek istiyorum.",
+    "İyi eğlenceler ..."
+];
+let messageIndex = 0;
+let charIndex = 0;
+const typingElement = document.querySelector('.typing');
+
+function type() {
+    if (charIndex < messages[messageIndex].length) {
+        typingElement.textContent += messages[messageIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(type, 100); // Tippgeschwindigkeit
+    } else {
+        setTimeout(() => {
+            charIndex = 0;
+            messageIndex = (messageIndex + 1) % messages.length;
+            typingElement.textContent = '';
+            type();
+        }, 2000); // Pause zwischen Sätzen
+    }
+}
+
+type();
+
 </script>
 
 </body>
