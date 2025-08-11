@@ -8,7 +8,7 @@
 <!-- Google Font für Schreibschrift -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
-<!-- Font Awesome für Herz-Icon -->
+<!-- Font Awesome für Herz-Icon & Menü -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
@@ -27,23 +27,38 @@
         color: pink;
         font-family: 'Pacifico', cursive;
         font-size: 2.5rem;
-        text-align: center;
-        padding: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-wrap: wrap;
         gap: 10px;
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
     }
 
     header i {
         color: pink;
     }
 
+    /* Menü-Button */
+    .menu-toggle {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: pink;
+        cursor: pointer;
+        position: absolute;
+        left: 15px;
+    }
+
     /* Layout */
     .container {
         flex: 1;
         display: flex;
+        margin-top: 80px; /* Platz unter Header */
     }
 
     /* Sidebar */
@@ -51,6 +66,7 @@
         width: 220px;
         background-color: rgba(0,0,0,0.7);
         padding: 20px;
+        transition: transform 0.3s ease;
     }
 
     nav h3 {
@@ -70,6 +86,11 @@
         color: #ffb6c1;
     }
 
+    /* Eingeklappt */
+    nav.closed {
+        transform: translateX(-100%);
+    }
+
     /* Hauptbereich */
     main {
         flex: 1;
@@ -78,7 +99,7 @@
         position: relative;
     }
 
-    /* Hintergrund abdunkeln für Lesbarkeit */
+    /* Hintergrund abdunkeln */
     main::before {
         content: "";
         position: absolute;
@@ -95,17 +116,15 @@
 
     /* Schreibmaschinen-Effekt */
     .typing {
-    border-right: .15em solid #ffb6c1;
-    white-space: normal;
-    overflow: hidden;
-    max-width: 90%;
-    margin: 0 auto;
-    word-break: break-word;
-    display: inline-block; /* wichtig: passt sich Textbreite an */
+        border-right: .15em solid #ffb6c1;
+        white-space: normal;
+        overflow: hidden;
+        max-width: 90%;
+        margin: 0 auto;
+        word-break: break-word;
+        display: inline-block;
+        animation: blink .75s step-end infinite;
     }
-
-
-
 
     @keyframes blink {
         50% { border-color: transparent }
@@ -134,31 +153,26 @@
             flex-direction: column;
         }
         nav {
-            width: 100%;
-        }
-        main {
-            min-height: 300px;
-        }
-        header {
-            font-size: 2rem;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 15px;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            height: calc(100% - 80px);
+            z-index: 999;
         }
     }
 </style>
-
 </head>
 <body>
 
 <header>
+    <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     <i class="fas fa-heart"></i>
     Edin & Sudenaz
     <i class="fas fa-heart"></i>
 </header>
 
 <div class="container">
-    <nav>
+    <nav class="closed">
         <h3>Menü</h3>
         <a href="#">Startseite</a>
         <a href="#">Brief 1</a>
@@ -168,7 +182,7 @@
 
     <main>
         <div class="content">
-            <div class="typing"> </div>
+            <div class="typing"></div>
         </div>
     </main>
 </div>
@@ -181,7 +195,7 @@
 </footer>
 
 <script>
-
+// Schreibmaschinen-Text
 const messages = [
     "Web siteme hoş geldin Edinim <3",
     "Sana olan sevgim o kadar büyük ki, bunu bu sayfayla sana iletmek istiyorum.",
@@ -195,19 +209,24 @@ function type() {
     if (charIndex < messages[messageIndex].length) {
         typingElement.textContent += messages[messageIndex].charAt(charIndex);
         charIndex++;
-        setTimeout(type, 100); // Tippgeschwindigkeit
+        setTimeout(type, 100);
     } else {
         setTimeout(() => {
             charIndex = 0;
             messageIndex = (messageIndex + 1) % messages.length;
             typingElement.textContent = '';
             type();
-        }, 2000); // Pause zwischen Sätzen
+        }, 2000);
     }
 }
-
 type();
 
+// Sidebar Toggle
+const nav = document.querySelector('nav');
+const toggleBtn = document.querySelector('.menu-toggle');
+toggleBtn.addEventListener('click', () => {
+    nav.classList.toggle('closed');
+});
 </script>
 
 </body>
