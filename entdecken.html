@@ -111,6 +111,7 @@ let objects = [];
 let score = 0;
 let missed = 0;
 let speed = 2;
+let spawnRate = 1000; // ms
 let bestScore = localStorage.getItem("bestScore") || 0;
 document.getElementById("best").innerText = bestScore;
 
@@ -142,12 +143,6 @@ function spawnObject() {
     }
 }
 
-function maintainObjects() {
-    while (objects.length < 5) {
-        spawnObject();
-    }
-}
-
 function drawObjects() {
     ctx.font = "24px Arial";
     objects.forEach(o => {
@@ -158,44 +153,36 @@ function drawObjects() {
 
 function checkCollisions() {
     objects = objects.filter(o => {
-        // Gefangen
         if (o.y > basket.y && o.x > basket.x - 15 && o.x < basket.x + basket.width) {
             score += o.type.points;
-            if (o.type.bad) { // Stinkefinger zählt auch als verpasst
-                missed++;
-                document.getElementById("missed").innerText = missed;
-            }
             document.getElementById("score").innerText = score;
             if (score > bestScore) {
                 bestScore = score;
                 localStorage.setItem("bestScore", bestScore);
                 document.getElementById("best").innerText = bestScore;
             }
-            if (missed >= 5) gameOver();
             return false;
         }
-        // Verpasst
         if (o.y > canvas.height) {
             if (!o.type.bad) {
                 missed++;
                 document.getElementById("missed").innerText = missed;
+                if (missed >= 5) {
+                    alert("Game Over! Dein Score: " + score);
+                    resetGame();
+                }
             }
-            if (missed >= 5) gameOver();
             return false;
         }
         return true;
     });
 }
 
-function gameOver() {
-    alert("Game Over! Dein Score: " + score);
-    resetGame();
-}
-
 function resetGame() {
     score = 0;
     missed = 0;
     speed = 2;
+    spawnRate = 1000;
     document.getElementById("score").innerText = score;
     document.getElementById("missed").innerText = missed;
     objects = [];
@@ -206,9 +193,16 @@ function gameLoop() {
     drawBasket();
     drawObjects();
     checkCollisions();
-    maintainObjects(); // Immer 4-5 Objekte halten
     requestAnimationFrame(gameLoop);
 }
+
+setInterval(() => {
+    spawnObject();
+    if (score % 10 === 0 && score > 0) {
+        speed += 0.2;
+        spawnRate = Math.max(300, spawnRate - 20);
+    }
+}, spawnRate);
 
 // Steuerung per Tastatur
 document.addEventListener("keydown", e => {
@@ -232,11 +226,6 @@ canvas.addEventListener("mousemove", e => {
 gameLoop();
 </script>
 
-
 </body>
 </html>
 
-
-</script>
-</body>
-</html>
