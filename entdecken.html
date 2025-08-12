@@ -96,6 +96,120 @@ footer a:hover {
 </header>
 
 <main>
+    <h1>Fang die Herzen ❤️</h1>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    <p>Punkte: <span id="score">0</span></p>
+    <img id="rewardImage" src="images/belohnung.jpg" alt="Belohnung" style="display:none; max-width: 100%; margin-top: 20px;">
+    <button id="restartBtn" style="display:none; padding:10px 20px; margin-top:20px; font-size:16px; cursor:pointer;">🔄 Neu starten</button>
+</main>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let basket, hearts, score, rightPressed, leftPressed, gameRunning;
+resetGame();
+
+// Herz zeichnen
+function drawHeart(x, y) {
+    ctx.font = "24px Arial";
+    ctx.fillText("❤️", x, y);
+}
+
+// Korb zeichnen
+function drawBasket() {
+    ctx.fillStyle = "pink";
+    ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+}
+
+// Herz erzeugen
+function spawnHeart() {
+    if (!gameRunning) return;
+    hearts.push({ x: Math.random() * (canvas.width - 20), y: 0 });
+}
+
+// Alles zeichnen
+function draw() {
+    if (!gameRunning) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBasket();
+    hearts.forEach(h => {
+        drawHeart(h.x, h.y);
+        h.y += 2; // Geschwindigkeit
+    });
+
+    // Kollisionsprüfung
+    hearts = hearts.filter(h => {
+        if (h.y > basket.y && h.x > basket.x - 15 && h.x < basket.x + basket.width) {
+            score++;
+            document.getElementById("score").innerText = score;
+            if (score >= 15) {
+                showReward();
+            }
+            return false;
+        }
+        return h.y < canvas.height;
+    });
+}
+
+// Bewegung
+function moveBasket() {
+    if (!gameRunning) return;
+    if (rightPressed && basket.x < canvas.width - basket.width) {
+        basket.x += 5;
+    } else if (leftPressed && basket.x > 0) {
+        basket.x -= 5;
+    }
+}
+
+// Tasteneingabe
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") rightPressed = true;
+    if (e.key === "ArrowLeft") leftPressed = true;
+});
+document.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowRight") rightPressed = false;
+    if (e.key === "ArrowLeft") leftPressed = false;
+});
+
+// Touchsteuerung fürs Handy
+canvas.addEventListener("touchmove", (e) => {
+    let touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+    basket.x = touchX - basket.width / 2;
+});
+
+// Spielschleifen
+setInterval(() => {
+    draw();
+    moveBasket();
+}, 20);
+setInterval(spawnHeart, 1500);
+
+// Belohnung
+function showReward() {
+    gameRunning = false;
+    document.getElementById("rewardImage").style.display = "block";
+    document.getElementById("restartBtn").style.display = "inline-block";
+}
+
+// Neu starten
+document.getElementById("restartBtn").addEventListener("click", resetGame);
+
+function resetGame() {
+    basket = { x: canvas.width / 2 - 25, y: canvas.height - 40, width: 50, height: 20 };
+    hearts = [];
+    score = 0;
+    rightPressed = false;
+    leftPressed = false;
+    gameRunning = true;
+    document.getElementById("score").innerText = score;
+    document.getElementById("rewardImage").style.display = "none";
+    document.getElementById("restartBtn").style.display = "none";
+}
+</script>
+
+
+<main>
     <h1 class="content">Entdecken</h1>
     <p class="content">Hier kannst du spannende Inhalte einfügen.</p>
 </main>
