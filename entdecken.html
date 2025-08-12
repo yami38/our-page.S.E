@@ -1,549 +1,234 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Edin & Sudenaz — Entdecken</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edin & Sudenaz</title>
 
-<!-- Schrift -->
+<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-<!-- Icons -->
+
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-/* Basis */
-* { box-sizing: border-box; }
-html,body {
-  margin:0;
-  padding:0;
-  height:100%;
-  background-color: snow;
-  font-family: Arial, Helvetica, sans-serif;
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: snow;
+    font-family: Times New Roman, sans-serif;
+    color: black;
+    text-align: center;
+    overflow-x: hidden;
 }
 
-/* Header */
-header{
-  background-color: snow;
-  color: #8b0000;
-  font-family: 'Great Vibes', cursive;
-  font-size: 1.6rem;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:18px 20px;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  z-index:1000;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-header i { color:#8b0000; font-size:1.6rem; }
-header a { color:#8b0000; text-decoration:none; font-family:'Great Vibes', cursive; }
-
-/* Raum unter Header */
-main {
-  padding: 110px 16px 24px;
-  min-height: calc(100vh - 110px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:12px;
-  color: black;
+header {
+    background-color: snow;
+    color: black;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid #ddd;
 }
 
-/* Canvas-Container (zentriert, responsive) */
-.game-wrap {
-  width: 100%;
-  max-width: 700px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
+header i {
+    color: #8b0000;
 }
 
-/* Canvas optik */
-#gameCanvas {
-  background: linear-gradient(180deg, rgba(255,245,245,1), rgba(255,240,240,1));
-  border-radius:12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  touch-action: none; /* verhindert Browser-Gesten auf Touch (iOS/Android) */
+header a {
+    font-family: 'Great Vibes', cursive;
+    color: #8b0000;
+    text-decoration: none;
 }
 
-/* Korb / Score UI */
-.info-row {
-  display:flex;
-  gap:12px;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-.score-box {
-  background: rgba(255,255,255,0.9);
-  padding:8px 12px;
-  border-radius:8px;
-  font-weight:600;
-  color:#333;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-.small {
-  font-size:0.9rem;
-  color:#555;
+#hud {
+    margin-top: 90px;
+    font-size: 1.2rem;
 }
 
-/* Buttons */
-button {
-  padding:8px 12px;
-  border-radius:8px;
-  border:none;
-  cursor:pointer;
-  background:#8b0000;
-  color:white;
-  font-weight:600;
+#hud span {
+    display: inline-block;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin: 0 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-button:active { transform: translateY(1px); }
 
-/* Footer */
-footer{
-  background-color: rgba(0,0,0,0.8);
-  padding:12px;
-  text-align:center;
-  margin-top:auto;
-}
-footer a { color: MistyRose; margin:0 8px; text-decoration:none; }
-
-/* Responsive Feinheiten */
-@media (max-width:520px){
-  header { font-size:1.4rem; padding:14px; }
-  main { padding-top:100px; }
+canvas {
+    background: #fff5f5;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 </style>
 </head>
 <body>
 
 <header>
-  <i class="fas fa-heart"></i>
-  <a href="index.html">Edin & Sudenaz</a>
-  <i class="fas fa-heart"></i>
+    <i class="fas fa-heart"></i>
+    <a href="index.html">Edin & Sudenaz</a>
+    <i class="fas fa-heart"></i>
 </header>
 
-<main>
-  <div class="game-wrap">
-    <h1 style="margin:0;">Fang die Herzen ❤️</h1>
+<h1>Fang die Herzen ❤️</h1>
+<div id="hud">
+    <span>Score: <span id="score">0</span></span>
+    <span>Best: <span id="best">0</span></span>
+    <span>Verpasst: <span id="missed">0</span>/5</span>
+</div>
 
-    <div class="info-row">
-      <div class="score-box">Score: <span id="score">0</span></div>
-      <div class="score-box small">Best: <span id="best">0</span></div>
-      <div class="score-box small">Verpasst: <span id="missed">0</span>/5</div>
-      <button id="restartBtn" style="display:none;">🔄 Neu starten</button>
-    </div>
+<canvas id="gameCanvas"></canvas>
 
-    <canvas id="gameCanvas" width="500" height="600" aria-label="Herzen-Fang Spiel"></canvas>
-
-    <div class="small" style="max-width:600px; text-align:center; color:#444;">
-      Tippe oder klicke ein Herz um es sofort zu fangen, nutze Maus, Pfeile oder Touch um den Korb zu bewegen.
-    </div>
-  </div>
-</main>
-
-<footer>
-  <a href="entdecken.html">Entdecken</a> |
-  <a href="einkaufen.html">Einkaufen</a> |
-  <a href="kontaktieren.html">Kontaktieren</a>
+<footer style="margin-top:30px;">
+    <a href="entdecken.html">Entdecken</a> | 
+    <a href="einkaufen.html">Einkaufen</a> |
+    <a href="kontaktieren.html">Kontaktieren</a> 
 </footer>
 
 <script>
-/* -------------------------
-   Spielkonfiguration
-   ------------------------- */
-const config = {
-  maxObjects: 3,               // max gleichzeitig fallende Objekte
-  baseSpawnMs: 1000,           // Start-Spawn-Intervall
-  minSpawnMs: 350,             // schnellstes Intervall
-  spawnCurve: 15,              // wie schnell spawn reduziert mit Score
-  baseFallSpeed: 1.6,         // Basisfallgeschwindigkeit
-  speedIncreaseEvery: 8,      // alle X Punkte wird etwas schneller
-  missedLimit: 5              // Game over wenn erreicht
-};
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-/* -------------------------
-   Setup
-   ------------------------- */
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-let width, height;
 function resizeCanvas() {
-  // responsive Größe: bis 700px (max), auf Handy fast volle Breite
-  const maxW = 700;
-  const w = Math.min(maxW, Math.max(320, window.innerWidth - 40));
-  const h = Math.round(w * 1.1); // Verhältnis: etwas höher
-  canvas.width = w;
-  canvas.height = h;
-  width = canvas.width;
-  height = canvas.height;
-  // Korb neu positionieren wenn nötig
-  basket.x = Math.min(Math.max(0, basket.x), width - basket.width);
+    canvas.width = Math.min(window.innerWidth - 20, 500);
+    canvas.height = Math.min(window.innerHeight * 0.6, 600);
 }
-window.addEventListener('resize', () => {
-  resizeCanvas();
-  // wir spielen weiter, aber um Darstellung konsistent zu halten keine Resetlogik
-});
 resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
-/* -------------------------
-   Spielzustand
-   ------------------------- */
-let basket = { x: 0, y: 0, width: 70, height: 18 };
-function placeBasket() {
-  basket.width = Math.max(48, Math.round(width * 0.14));
-  basket.height = Math.max(14, Math.round(height * 0.03));
-  basket.x = (width - basket.width) / 2;
-  basket.y = height - basket.height - 8;
-}
-placeBasket();
-
-let objects = []; // {x,y,type,v}
+let basket = { x: canvas.width / 2 - 30, y: canvas.height - 40, width: 60, height: 20 };
+let objects = [];
 let score = 0;
 let missed = 0;
-let running = true;
-let rightPressed=false, leftPressed=false;
-let best = Number(localStorage.getItem('eds_bsf_best') || 0);
+let speed = 2;
+let spawnRate = 1000; // ms
+let bestScore = localStorage.getItem("bestScore") || 0;
+document.getElementById("best").innerText = bestScore;
 
-/* UI references */
-const scoreEl = document.getElementById('score');
-const bestEl = document.getElementById('best');
-const missedEl = document.getElementById('missed');
-const restartBtn = document.getElementById('restartBtn');
-bestEl.textContent = best;
-
-/* -------------------------
-   Objekt-Logik
-   ------------------------- */
-// Typen und Wahrscheinlichkeiten (höherer Wert = häufiger)
 const types = [
-  { id:'orange', emoji:'🧡', points:1, weight:60 },  // häufig
-  { id:'red',    emoji:'❤️', points:2, weight:30 },  // seltener
-  { id:'diamond',emoji:'💎', points:5, weight:6 },   // sehr selten
-  { id:'flip',   emoji:'🖕', points:-1, weight:4 }   // selten, Minuspunkte
+    { emoji: "🧡", points: 1, bad: false, chance: 0.6 },
+    { emoji: "🖕", points: -1, bad: true, chance: 0.1 },
+    { emoji: "❤️", points: 2, bad: false, chance: 0.25 },
+    { emoji: "💎", points: 5, bad: false, chance: 0.05 }
 ];
 
-function pickType(){
-  const total = types.reduce((s,t)=>s+t.weight,0);
-  let r = Math.random()*total;
-  for(const t of types){
-    if(r < t.weight) return t;
-    r -= t.weight;
-  }
-  return types[0];
+function drawBasket() {
+    ctx.fillStyle = "pink";
+    ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
 }
 
-function spawnObject(){
-  // begrenzen wie viele gleichzeitig
-  if(objects.length >= config.maxObjects || !running) return;
-  const t = pickType();
-  const margin = 22;
-  const x = Math.random()*(width - margin*2) + margin;
-  const fallSpeed = config.baseFallSpeed + Math.floor(score/config.speedIncreaseEvery)*0.4 + (Math.random()*0.8);
-  objects.push({ x, y: -20, vx:0, vy: fallSpeed, type: t });
+function spawnObject() {
+    let r = Math.random();
+    let cumulative = 0;
+    for (let t of types) {
+        cumulative += t.chance;
+        if (r <= cumulative) {
+            objects.push({ 
+                type: t, 
+                x: Math.random() * (canvas.width - 30), 
+                y: -20 
+            });
+            break;
+        }
+    }
 }
 
-/* Spawn-Loop (dynamisch je nach Score) */
-let spawnTimer = null;
-function scheduleSpawn(){
-  if(spawnTimer) clearTimeout(spawnTimer);
-  const nextMs = Math.max(config.minSpawnMs, config.baseSpawnMs - score*config.spawnCurve);
-  spawnTimer = setTimeout(()=>{
+function drawObjects() {
+    ctx.font = "24px Arial";
+    objects.forEach(o => {
+        ctx.fillText(o.type.emoji, o.x, o.y);
+        o.y += speed;
+    });
+}
+
+function checkCollisions() {
+    objects = objects.filter(o => {
+        if (o.y > basket.y && o.x > basket.x - 15 && o.x < basket.x + basket.width) {
+            score += o.type.points;
+            document.getElementById("score").innerText = score;
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem("bestScore", bestScore);
+                document.getElementById("best").innerText = bestScore;
+            }
+            return false;
+        }
+        if (o.y > canvas.height) {
+            if (!o.type.bad) {
+                missed++;
+                document.getElementById("missed").innerText = missed;
+                if (missed >= 5) {
+                    alert("Game Over! Dein Score: " + score);
+                    resetGame();
+                }
+            }
+            return false;
+        }
+        return true;
+    });
+}
+
+function resetGame() {
+    score = 0;
+    missed = 0;
+    speed = 2;
+    spawnRate = 1000;
+    document.getElementById("score").innerText = score;
+    document.getElementById("missed").innerText = missed;
+    objects = [];
+}
+
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBasket();
+    drawObjects();
+    checkCollisions();
+    requestAnimationFrame(gameLoop);
+}
+
+setInterval(() => {
     spawnObject();
-    scheduleSpawn();
-  }, nextMs);
-}
-scheduleSpawn();
-
-/* -------------------------
-   Eingaben: Tastatur / Maus / Touch
-   ------------------------- */
-document.addEventListener('keydown', e=>{
-  if(e.key === 'ArrowRight') rightPressed = true;
-  if(e.key === 'ArrowLeft') leftPressed = true;
-});
-document.addEventListener('keyup', e=>{
-  if(e.key === 'ArrowRight') rightPressed = false;
-  if(e.key === 'ArrowLeft') leftPressed = false;
-});
-
-// Maus-Bewegung: bewegt Körbchen (PC)
-canvas.addEventListener('mousemove', e=>{
-  const r = canvas.getBoundingClientRect();
-  const x = e.clientX - r.left;
-  basket.x = Math.min(Math.max(0, x - basket.width/2), width - basket.width);
-});
-
-// Klick / Tap auf Objekt fangen
-canvas.addEventListener('click', e=>{
-  const r = canvas.getBoundingClientRect();
-  const x = e.clientX - r.left;
-  const y = e.clientY - r.top;
-  // prüfe ob eines der Objekte getroffen wurde (kleiner Hitbox)
-  for(let i = objects.length-1; i>=0; i--){
-    const o = objects[i];
-    const dx = x - o.x;
-    const dy = y - o.y;
-    if(Math.hypot(dx,dy) < 30){ // Treffer
-      collectObject(i);
-      break;
+    if (score % 10 === 0 && score > 0) {
+        speed += 0.2;
+        spawnRate = Math.max(300, spawnRate - 20);
     }
-  }
+}, spawnRate);
+
+// Steuerung per Tastatur
+document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") basket.x = Math.min(canvas.width - basket.width, basket.x + 20);
+    if (e.key === "ArrowLeft") basket.x = Math.max(0, basket.x - 20);
 });
 
-// Touch: verhindern dass die Seite scrollt beim Spielen
-canvas.addEventListener('touchstart', e=>{ e.preventDefault(); }, {passive:false});
-canvas.addEventListener('touchmove', e=>{
-  e.preventDefault();
-  const r = canvas.getBoundingClientRect();
-  const x = e.touches[0].clientX - r.left;
-  basket.x = Math.min(Math.max(0, x - basket.width/2), width - basket.width);
-}, {passive:false});
+// Touchsteuerung
+canvas.addEventListener("touchmove", e => {
+    e.preventDefault();
+    let touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+    basket.x = touchX - basket.width / 2;
+}, { passive: false });
 
-// Maus klicken/ziehen (auch für Drag)
-let mouseDown = false;
-canvas.addEventListener('mousedown', ()=>mouseDown=true);
-window.addEventListener('mouseup', ()=>mouseDown=false);
-canvas.addEventListener('mousemove', e=>{ if(mouseDown){ const r = canvas.getBoundingClientRect(); const x = e.clientX - r.left; basket.x = Math.min(Math.max(0, x - basket.width/2), width - basket.width); } });
-
-/* -------------------------
-   Sammel- / Kollisions-Logik
-   ------------------------- */
-function collectObject(index){
-  const o = objects[index];
-  if(!o) return;
-  // Punkte
-  score += o.type.points;
-  // Negative Punkte allowed
-  if(score < 0) score = 0;
-  updateScore();
-
-  // wenn gutes Objekt dann ggf. nichts - wir haben separate miss-Logik beim Unten-anfangen
-  // entferne Objekt
-  objects.splice(index,1);
-
-  // ggf. update best
-  if(score > best){
-    best = score;
-    localStorage.setItem('eds_bsf_best', String(best));
-    bestEl.textContent = best;
-    // kleines visuelles Feedback (kurzer Flash)
-    flashBest();
-  }
-}
-
-function flashBest(){
-  bestEl.parentElement.style.transition = 'transform .18s';
-  bestEl.parentElement.style.transform = 'scale(1.06)';
-  setTimeout(()=>{ bestEl.parentElement.style.transform = ''; }, 220);
-}
-
-/* -------------------------
-   Update UI
-   ------------------------- */
-function updateScore(){
-  scoreEl.textContent = score;
-  missedEl.textContent = missed;
-}
-
-/* -------------------------
-   Game Over & Reset
-   ------------------------- */
-function gameOver(){
-  running = false;
-  restartBtn.style.display = 'inline-block';
-}
-
-restartBtn.addEventListener('click', ()=>{
-  resetGame();
+// Maussteuerung
+canvas.addEventListener("mousemove", e => {
+    let mouseX = e.clientX - canvas.getBoundingClientRect().left;
+    basket.x = mouseX - basket.width / 2;
 });
 
-function resetGame(){
-  objects = [];
-  score = 0;
-  missed = 0;
-  running = true;
-  updateScore();
-  restartBtn.style.display = 'none';
-  scheduleSpawn();
-}
+gameLoop();
+</script>
 
-/* -------------------------
-   Spielschleife / Zeichnen
-   ------------------------- */
-function drawBasket(){
-  ctx.fillStyle = '#ffb6c1';
-  ctx.fillRect(Math.round(basket.x), Math.round(basket.y), basket.width, basket.height);
-  // kleiner Schatten
-  ctx.fillStyle = 'rgba(0,0,0,0.08)';
-  ctx.fillRect(Math.round(basket.x)+6, basket.y+basket.height-3, basket.width-12, 3);
-}
+</body>
+</html>
 
-function drawObject(o){
-  ctx.font = Math.round(height*0.06) + 'px serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  // Farbiger Kreis als Hintergrund je Typ
-  if(o.type.id === 'orange') {
-    ctx.fillStyle = '#ffd9c4';
-  } else if(o.type.id === 'red'){
-    ctx.fillStyle = '#ffdfe7';
-  } else if(o.type.id === 'diamond'){
-    ctx.fillStyle = '#fff8e6';
-  } else {
-    ctx.fillStyle = '#f3f3f3';
-  }
-  // leichter Kreis
-  ctx.beginPath();
-  ctx.arc(o.x, o.y, Math.round(height*0.04), 0, Math.PI*2);
-  ctx.fill();
-
-  // Emoji
-  ctx.fillStyle = '#000';
-  ctx.fillText(o.type.emoji, o.x, o.y + (height*0.005));
-}
-
-function step(){
-  if(!running) {
-    // Spiel gestoppt — zeichne einmal final
-    drawScene();
-    return;
-  }
-
-  // Bewegung per Tasten
-  if(rightPressed) basket.x = Math.min(width - basket.width, basket.x + 6);
-  if(leftPressed)  basket.x = Math.max(0, basket.x - 6);
-
-  // Update Objekte
-  for(let i = objects.length-1; i>=0; i--){
-    const o = objects[i];
-    o.y += o.vy;
-    // einfache leichte horizontale Schwingung
-    o.x += Math.sin((o.y + i*13)/50) * 0.6;
-
-    // falls unter unteren Rand
-    if(o.y > height + 30){
-      // wenn gutes Objekt verpasst => missed++
-      if(o.type.id === 'orange' || o.type.id === 'red' || o.type.id === 'diamond'){
-        missed++;
-        if(missed >= config.missedLimit){
-          updateScore(); // letzte Anzeige
-          gameOver();
-        } else {
-          updateScore();
-        }
-      }
-      // entferne Objekt
-      objects.splice(i,1);
-    } else {
-      // Kollisionsbox mit Korb prüfen (Sammeln)
-      if(o.y > basket.y && o.x > basket.x - 12 && o.x < basket.x + basket.width + 12){
-        // wenn stinkefinger -> bei Berührung Minuspunkte
-        if(o.type.id === 'flip'){
-          score = Math.max(0, score + o.type.points); // -1
-          updateScore();
-        } else {
-          score += o.type.points;
-          updateScore();
-        }
-        // remove
-        if(score > best){
-          best = score;
-          localStorage.setItem('eds_bsf_best', String(best));
-          bestEl.textContent = best;
-          flashBest();
-        }
-        objects.splice(i,1);
-      }
-    }
-  }
-
-  drawScene();
-  requestAnimationFrame(step);
-}
-
-function drawScene(){
-  // klaren Hintergrund
-  ctx.clearRect(0,0,width,height);
-
-  // leichtes Muster/Himmel
-  const g = ctx.createLinearGradient(0,0,0,height);
-  g.addColorStop(0, '#fff6f6');
-  g.addColorStop(1, '#fff0f0');
-  ctx.fillStyle = g;
-  ctx.fillRect(0,0,width,height);
-
-  // draw objects
-  for(const o of objects) drawObject(o);
-
-  // draw basket
-  drawBasket();
-}
-
-// Start Game Loop
-requestAnimationFrame(step);
-
-/* -------------------------
-   Spawn tuning basierend auf Score (update schedule)
-   ------------------------- */
-function adjustSpawnAndSpeed(){
-  // Restart schedule with updated interval
-  if(spawnTimer) clearTimeout(spawnTimer);
-  const nextMs = Math.max(config.minSpawnMs, config.baseSpawnMs - score * config.spawnCurve);
-  spawnTimer = setTimeout(()=>{
-    // seltener: wenn bereits viele Objekte vorhanden, skip spawn
-    if(objects.length < config.maxObjects && running) spawnObject();
-    adjustSpawnAndSpeed();
-  }, nextMs);
-}
-// initial
-adjustSpawnAndSpeed();
-
-/* -------------------------
-   Klick sammeln (Objekte durch Klick / Tap fangen)
-   ------------------------- */
-function clickCollect(x,y){
-  for(let i = objects.length-1; i>=0; i--){
-    const o = objects[i];
-    const dx = x - o.x;
-    const dy = y - o.y;
-    if(Math.hypot(dx,dy) < Math.max(30, height*0.06)){
-      collectObject(i);
-      return true;
-    }
-  }
-  return false;
-}
-
-// auch click auf canvas (für Touch / Klick)
-canvas.addEventListener('click', (ev)=>{
-  const r = canvas.getBoundingClientRect();
-  const x = ev.clientX - r.left;
-  const y = ev.clientY - r.top;
-  clickCollect(x,y);
-});
-
-/* -------------------------
-   Initialisierung
-   ------------------------- */
-function init(){
-  resizeCanvas();
-  placeBasket();
-  score = 0; missed = 0; running = true;
-  objects = [];
-  scoreEl.textContent = score;
-  missedEl.textContent = missed;
-  bestEl.textContent = best;
-  restartBtn.style.display = 'none';
-  adjustSpawnAndSpeed();
-}
-init();
 
 </script>
 </body>
