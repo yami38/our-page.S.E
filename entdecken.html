@@ -189,47 +189,66 @@
     }
 
     function checkCollisions() {
-        objects = objects.filter(o => {
-            const basketTop = basket.y;
-            const basketBottom = basket.y + basket.height;
-            const basketLeft = basket.x;
-            const basketRight = basket.x + basket.width;
-            const objBottom = o.y + o.height;
-            const objLeft = o.x;
-            const objRight = o.x + o.width;
-
-            // Treffer
-            if (objBottom > basketTop && o.y < basketBottom && objRight > basketLeft && objLeft < basketRight) {
-                score += o.type.points;
-                document.getElementById("score").innerText = score;
-
-                if (score > bestScore) {
-                    bestScore = score;
-                    document.getElementById("best").innerText = score;
-                    localStorage.setItem("bestScore", score);
-                }
-                return false;
-            }
-
-            // Verpasst
-            if (o.y > canvas.height) {
-                // Nur "gute" Objekte zählen als verpasst
-                if (!o.type.bad) {
-                    missed++;
-                    const missedElement = document.getElementById("missed");
-                    if (missedElement) missedElement.innerText = missed;
-                    if (missed >= 5) {
-                        alert("Game Over! Dein Score: " + score);
-                        resetGame();
-                    }
-                }
-            return false;
+      objects = objects.filter(o => {
+        // Objekt- und Korb-Koordinaten
+        const objTop = o.y;
+        const objBottom = o.y + (o.height || 30);
+        const objLeft = o.x;
+        const objRight = o.x + (o.width || 30);
+    
+        const basketTop = basket.y;
+        const basketBottom = basket.y + basket.height;
+        const basketLeft = basket.x;
+        const basketRight = basket.x + basket.width;
+    
+        // 1) Kollision (Objekt wird vom Korb gefangen)
+        const collided = objBottom > basketTop && objTop < basketBottom && objRight > basketLeft && objLeft < basketRight;
+        if (collided) {
+          // Punkte vergeben / abziehen
+          score += o.type.points;
+          if (score < 0) score = 0; // keine negativen Scores (optional)
+          // Wenn du möchtest, dass Stinkefinger beim Fangen auch als "missed" zählen:
+          if (o.type.bad) {
+            missed++;
+          }
+          updateHUD(); // Funktion, die Score/Best/Missed im UI updatet (siehe unten)
+          // Highscore prüfen
+          if (score > best) {
+            best = score;
+            localStorage.setItem('eds_best', String(best));
+            document.getElementById('best').textContent = best;
+          }
+          return false; // Objekt entfernen (gefangen)
         }
 
+        // 2) Objekt ist unterhalb des Canvas (verpasst)
+        if (objTop > canvas.height) {
+          // Nur "gute" Objekte zählen als verpasst
+          if (!o.type.bad) {
+            missed++;
+            updateHUD();
+            if (missed >= CONFIG.missedLimit) {
+              gameOver();
             }
-            return true;
-        });
+          } else {
+            // stinkefinger, die durchfallen -> ignorieren (nicht als missed zählen)
+            // (keine Aktion nötig)
+          }
+          return false; // Objekt entfernen (es ist raus)
+        }
+    
+        // 3) Objekt bleibt im Spiel
+        return true;
+      });
     }
+
+    function updateHUD() {
+      const scoreEl = document.getElementById('score');
+      const missedEl = document.getElementById('missed');
+      if (scoreEl) scoreEl.textContent = score;
+      if (missedEl) missedEl.textContent = missed;
+    }
+
 
     function resetGame() {
         score = 0;
