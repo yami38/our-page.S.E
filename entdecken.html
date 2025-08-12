@@ -70,6 +70,7 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             display: block;
+            border: 1px solid #ddd; /* Debugging: Sichtbare Canvas-Grenze */
         }
 
         footer {
@@ -90,6 +91,10 @@
             #hud {
                 font-size: 1rem;
                 margin-top: 70px;
+            }
+            canvas {
+                width: 100%;
+                max-width: 400px;
             }
         }
     </style>
@@ -117,9 +122,15 @@
     </footer>
 
     <script>
+        // DOM-Elemente sicher abrufen
         const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+        if (!canvas) {
+            console.error("Canvas element not found");
+            alert("Canvas-Element nicht gefunden. Bitte überprüfe den HTML-Code.");
+            throw new Error("Canvas element not found");
+        }
 
+        const ctx = canvas.getContext("2d");
         if (!ctx) {
             console.error("Canvas context not supported");
             alert("Dein Browser unterstützt kein Canvas. Bitte benutze einen modernen Browser.");
@@ -129,8 +140,8 @@
         function resizeCanvas() {
             canvas.width = Math.min(window.innerWidth - 20, 500);
             canvas.height = Math.min(window.innerHeight * 0.6, 600);
-            // Basket-Position bei Resize anpassen
             basket.x = Math.max(0, Math.min(canvas.width - basket.width, basket.x));
+            console.log("Canvas resized to:", canvas.width, canvas.height);
         }
         resizeCanvas();
         window.addEventListener("resize", resizeCanvas);
@@ -141,16 +152,19 @@
         let missed = 0;
         let speed = 2;
         let spawnRate = 1000;
+        let lastSpawn = 0;
         let lastTime = 0;
 
         // Best Score aus localStorage laden
         let bestScore = 0;
         try {
-            bestScore = parseInt(localStorage.getItem("bestScore")) || 0;
+            const savedBest = localStorage.getItem("bestScore");
+            bestScore = savedBest ? parseInt(savedBest) : 0;
+            const bestElement = document.getElementById("best");
+            if (bestElement) bestElement.innerText = bestScore;
         } catch (e) {
             console.warn("Fehler beim Laden von localStorage:", e);
         }
-        document.getElementById("best").innerText = bestScore;
 
         const types = [
             { emoji: "🧡", points: 1, bad: false, chance: 0.5 },
@@ -163,59 +177,78 @@
         function drawBasket() {
             ctx.fillStyle = "pink";
             ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+            console.log("Basket drawn at:", basket.x, basket.y);
         }
 
         function spawnObject() {
             let r = Math.random();
             let cumulative = 0;
-            for (let t747 of types) {
-                cumulative += t747.chance;
+            for (let type of types) {
+                cumulative += type.chance;
                 if (r <= cumulative) {
                     objects.push({ 
-                        type: t747, 
+                        type: type, 
                         x: Math.random() * (canvas.width - 30), 
-                        y: -20 
+                        y: -30,
+                        width: 30,
+                        height: 30
                     });
+                    console.log("Spawned object:", type.emoji, "at", objects[objects.length - 1].x, objects[objects.length - 1].y);
                     break;
                 }
             }
         }
 
         function drawObjects() {
-            ctx.font = "28px Arial";
+            ctx.font = "32px Arial";
             ctx.textBaseline = "top";
+            ctx.textAlign = "center";
             objects.forEach(o => {
-                ctx.fillStyle = "black";
-                ctx.fillText(o.type.emoji, o.x, o.y);
+                ctx.fillStyle = o.type.bad ? "red" : "black";
+                ctx.fillText(o.type.emoji, o.x + 15, o.y);
                 o.y += speed;
+                console.log("Drawing object:", o.type.emoji, "at", o.x, o.y);
             });
         }
 
         function checkCollisions() {
             objects = objects.filter(o => {
-                if (o.y > basket.y && o.x > basket.x - 15 && o.x < basket.x + basket.width) {
+                const basketTop = basket.y;
+                const basketBottom = basket.y + basket.height;
+                const basketLeft = basket.x;
+                const basketRight = basket.x + basket.width;
+                const objBottom = o.y + o.height;
+                const objLeft = o.x;
+                const objRight = o.x + o.width;
+
+                if (objBottom > basketTop && o.y < basketBottom && objRight > basketLeft && objLeft < basketRight) {
                     score += o.type.points;
-                    document.getElementById("score").innerText = score;
-                    if (score > bestScore) {
-                        bestScore = score;
-                        try {
-                            localStorage.setItem("bestScore", bestScore);
-                        } catch (e) {
-                            console.warn("Fehler beim Speichern von localStorage:", e);
+                    const scoreElement = document.getElementById("score");
+                    if (scoreElement) scoreElement.innerText = score;
+                    try {
+                        const bestElement = document.getElementById("best");
+                        if (bestElement && score > bestScore) {
+                            bestScore = score;
+                            bestElement.innerText = score;
+                            localStorage.setItem("bestScore", score);
                         }
-                        document.getElementById("best").innerText = bestScore;
+                    } catch (e) {
+                        console.warn("Fehler beim Speichern von localStorage:", e);
                     }
+                    console.log("Collision detected, score:", score);
                     return false;
                 }
                 if (o.y > canvas.height) {
                     if (!o.type.bad) {
                         missed++;
-                        document.getElementById("missed").innerText = missed;
+                        const missedElement = document.getElementById("missed");
+                        if (missedElement) missedElement.innerText = missed;
                         if (missed >= 5) {
                             alert("Game Over! Dein Score: " + score);
                             resetGame();
                         }
                     }
+                    console.log("Object missed:", o.type.emoji);
                     return false;
                 }
                 return true;
@@ -228,11 +261,15 @@
             speed = 2;
             spawnRate = 1000;
             objects = [];
-            document.getElementById("score").innerText = score;
-            document.getElementById("missed").innerText = missed;
+            const scoreElement = document.getElementById("score");
+            const missedElement = document.getElementById("missed");
+            if (scoreElement) scoreElement.innerText = score;
+            if (missedElement) missedElement.innerText = missed;
+            console.log("Game reset");
         }
 
         function gameLoop(timestamp) {
+            if (!lastTime) lastTime = timestamp;
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
 
@@ -241,16 +278,16 @@
             drawObjects();
             checkCollisions();
 
-            if (deltaTime > 0) {
-                const spawnTimer = deltaTime / spawnRate;
-                if (spawnTimer >= 1) {
-                    spawnObject();
-                }
+            lastSpawn += deltaTime;
+            if (lastSpawn >= spawnRate) {
+                spawnObject();
+                lastSpawn = 0;
             }
 
             if (score > 0 && score % 10 === 0 && objects.length < 10) {
-                speed = Math.min(5, 2 + score * 0.05); // Geschwindigkeit begrenzen
+                speed = Math.min(5, 2 + score * 0.05);
                 spawnRate = Math.max(300, 1000 - score * 10);
+                console.log("Difficulty increased: speed =", speed, "spawnRate =", spawnRate);
             }
 
             requestAnimationFrame(gameLoop);
@@ -264,6 +301,7 @@
             if (e.key === "ArrowLeft") {
                 basket.x = Math.max(0, basket.x - 20);
             }
+            console.log("Basket moved to:", basket.x);
         });
 
         // Touchsteuerung
@@ -271,16 +309,23 @@
             e.preventDefault();
             let touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
             basket.x = Math.max(0, Math.min(canvas.width - basket.width, touchX - basket.width / 2));
+            console.log("Basket moved to (touch):", basket.x);
         }, { passive: false });
 
         // Maussteuerung
-        canvas.addTouchEventListener("mousemove", e => {
+        canvas.addEventListener("mousemove", e => {
             let mouseX = e.clientX - canvas.getBoundingClientRect().left;
             basket.x = Math.max(0, Math.min(canvas.width - basket.width, mouseX - basket.width / 2));
+            console.log("Basket moved to (mouse):", basket.x);
         });
 
         // Spiel starten
-        requestAnimationFrame(gameLoop);
+        try {
+            requestAnimationFrame(gameLoop);
+        } catch (e) {
+            console.error("Fehler beim Starten des Spiels:", e);
+            alert("Ein Fehler ist beim Starten des Spiels aufgetreten. Bitte überprüfe die Konsole für Details.");
+        }
     </script>
 </body>
 </html>
