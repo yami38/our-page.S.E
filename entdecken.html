@@ -188,59 +188,49 @@
         });
     }
 
-    function checkCollisions() {
-      objects = objects.filter(o => {
-        // Objekt- und Korb-Koordinaten
-        const objTop = o.y;
-        const objBottom = o.y + (o.height || 30);
-        const objLeft = o.x;
-        const objRight = o.x + (o.width || 30);
-    
-        const basketTop = basket.y;
-        const basketBottom = basket.y + basket.height;
-        const basketLeft = basket.x;
-        const basketRight = basket.x + basket.width;
-    
-        // 1) Kollision (Objekt wird vom Korb gefangen)
-        const collided = objBottom > basketTop && objTop < basketBottom && objRight > basketLeft && objLeft < basketRight;
-        if (collided) {
-          // Punkte vergeben / abziehen
-          score += o.type.points;
-          if (score < 0) score = 0; // keine negativen Scores (optional)
-          // Wenn du möchtest, dass Stinkefinger beim Fangen auch als "missed" zählen:
-          if (o.type.bad) {
-            missed++;
-          }
-          updateHUD(); // Funktion, die Score/Best/Missed im UI updatet (siehe unten)
-          // Highscore prüfen
-          if (score > best) {
-            best = score;
-            localStorage.setItem('eds_best', String(best));
-            document.getElementById('best').textContent = best;
-          }
-          return false; // Objekt entfernen (gefangen)
-        }
+     function checkCollisions() {
+            objects = objects.filter(o => {
+                const basketTop = basket.y;
+                const basketBottom = basket.y + basket.height;
+                const basketLeft = basket.x;
+                const basketRight = basket.x + basket.width;
+                const objBottom = o.y + o.height;
+                const objLeft = o.x;
+                const objRight = o.x + o.width;
 
-        // 2) Objekt ist unterhalb des Canvas (verpasst)
-        if (objTop > canvas.height) {
-          // Nur "gute" Objekte zählen als verpasst
-          if (!o.type.bad) {
-            missed++;
-            updateHUD();
-            if (missed >= CONFIG.missedLimit) {
-              gameOver();
-            }
-          } else {
-            // stinkefinger, die durchfallen -> ignorieren (nicht als missed zählen)
-            // (keine Aktion nötig)
-          }
-          return false; // Objekt entfernen (es ist raus)
+                if (objBottom > basketTop && o.y < basketBottom && objRight > basketLeft && objLeft < basketRight) {
+                    score += o.type.points;
+                    const scoreElement = document.getElementById("score");
+                    if (scoreElement) scoreElement.innerText = score;
+                    try {
+                        const bestElement = document.getElementById("best");
+                        if (bestElement && score > bestScore) {
+                            bestScore = score;
+                            bestElement.innerText = score;
+                            localStorage.setItem("bestScore", score);
+                        }
+                    } catch (e) {
+                        console.warn("Fehler beim Speichern von localStorage:", e);
+                    }
+                    console.log("Collision detected, score:", score);
+                    return false;
+                }
+                if (o.y > canvas.height) {
+                    if (!o.type.bad) {
+                        missed++;
+                        const missedElement = document.getElementById("missed");
+                        if (missedElement) missedElement.innerText = missed;
+                        if (missed >= 5) {
+                            alert("Game Over! Dein Score: " + score);
+                            resetGame();
+                        }
+                    }
+                    console.log("Object missed:", o.type.emoji);
+                    return false;
+                }
+                return true;
+            });
         }
-    
-        // 3) Objekt bleibt im Spiel
-        return true;
-      });
-    }
 
 
     function resetGame() {
