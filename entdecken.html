@@ -216,6 +216,135 @@ function collectObject(index){
     missed++;
   }
   if(score < 0) score = 0;
-  updateHU
+  updateHUD();
+  // update best
+  if(score > best){ best = score; localStorage.setItem('eds_best', String(best)); document.getElementById('best').textContent = best; }
+  objects.splice(index,1);
+}
+
+function updateHUD(){
+  document.getElementById('score').textContent = score;
+  document.getElementById('missed').textContent = missed;
+}
+
+/* ---------- Game Over / Reset ---------- */
+const restartBtn = document.getElementById('restartBtn');
+restartBtn.addEventListener('click', resetGame);
+
+function gameOver(){
+  running = false;
+  restartBtn.style.display = 'inline-block';
+}
+
+function resetGame(){
+  objects = [];
+  score = 0;
+  missed = 0;
+  running = true;
+  restartBtn.style.display = 'none';
+  updateHUD();
+  scheduleSpawn();
+}
+
+/* ---------- Draw / Step ---------- */
+function drawBasket(){
+  ctx.fillStyle = '#ffb6c1';
+  ctx.fillRect(Math.round(basket.x), Math.round(basket.y), basket.width, basket.height);
+  // small shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.08)';
+  ctx.fillRect(Math.round(basket.x)+6, basket.y + basket.height - 3, basket.width - 12, 3);
+}
+
+function drawObject(o){
+  const emSize = Math.round(height*0.07);
+  ctx.font = emSize + 'px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  // circle background for clarity
+  ctx.beginPath();
+  ctx.fillStyle = (o.type.id === 'orange' ? '#ffe9da' : o.type.id === 'red' ? '#ffdfe7' : o.type.id === 'diamond' ? '#fff8e6' : '#f3f3f3');
+  ctx.arc(o.x, o.y, Math.round(height*0.06), 0, Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle = '#000';
+  ctx.fillText(o.type.emoji, o.x, o.y + (height*0.005));
+}
+
+function step(){
+  if(!running) { render(); return; }
+
+  // keyboard control
+  if(rightPressed) basket.x = Math.min(width - basket.width, basket.x + 6);
+  if(leftPressed)  basket.x = Math.max(0, basket.x - 6);
+
+  // physics
+  for(let i = objects.length-1; i>=0; i--){
+    const o = objects[i];
+    o.y += o.vy;
+    // horizontal wobble
+    o.x += Math.sin((o.y + i*12)/40) * 0.6;
+
+    // if fallen below
+    if(o.y > height + 30){
+      // if it's a good object and missed -> increment missed
+      if(!o.type.bad){
+        missed++;
+        updateHUD();
+        if(missed >= CONFIG.missedLimit){ gameOver(); }
+      }
+      objects.splice(i,1);
+    } else {
+      // collision with basket (caught by touching)
+      if(o.y > basket.y && o.x > basket.x - 12 && o.x < basket.x + basket.width + 12){
+        // catching stinkefinger penalizes
+        if(o.type.bad){
+          score = Math.max(0, score + o.type.points);
+          missed++;
+        } else {
+          score += o.type.points;
+        }
+        if(score > best){ best = score; localStorage.setItem('eds_best', String(best)); document.getElementById('best').textContent = best; }
+        updateHUD();
+        objects.splice(i,1);
+      }
+    }
+  }
+
+  // ensure enough objects present
+  maintainObjects();
+  render();
+  requestAnimationFrame(step);
+}
+
+function render(){
+  ctx.clearRect(0,0,width,height);
+  // bg
+  const g = ctx.createLinearGradient(0,0,0,height);
+  g.addColorStop(0,'#fff6f6'); g.addColorStop(1,'#fff0f0');
+  ctx.fillStyle = g; ctx.fillRect(0,0,width,height);
+
+  // draw objects
+  for(const o of objects) drawObject(o);
+
+  // draw basket
+  drawBasket();
+}
+
+/* ---------- start ---------- */
+function init(){
+  resizeCanvas();
+  placeBasket();
+  objects = [];
+  score = 0; missed=0; running=true;
+  updateHUD();
+  restartBtn.style.display = 'none';
+  scheduleSpawn();
+  requestAnimationFrame(step);
+}
+init();
+</script>
+
+</body>
+</html>
+
 
 
