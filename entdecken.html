@@ -213,15 +213,19 @@
 
             // Verpasst
             if (o.y > canvas.height) {
-                if (!o.type.bad || o.type.emoji === "🖕") {
+                // Nur "gute" Objekte zählen als verpasst
+                if (!o.type.bad) {
                     missed++;
-                    document.getElementById("missed").innerText = missed;
+                    const missedElement = document.getElementById("missed");
+                    if (missedElement) missedElement.innerText = missed;
                     if (missed >= 5) {
                         alert("Game Over! Dein Score: " + score);
                         resetGame();
                     }
                 }
-                return false;
+            return false;
+        }
+
             }
             return true;
         });
