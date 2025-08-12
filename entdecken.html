@@ -1,231 +1,221 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edin & Sudenaz</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Edin & Sudenaz — Entdecken</title>
 
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    background-color: snow;
-    font-family: Times New Roman, sans-serif;
-    color: black;
-    text-align: center;
-    overflow-x: hidden;
-}
-
-header {
-    background-color: snow;
-    color: black;
-    font-family: 'Great Vibes', cursive;
-    font-size: 1.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    border-bottom: 1px solid #ddd;
-}
-
-header i {
-    color: #8b0000;
-}
-
-header a {
-    font-family: 'Great Vibes', cursive;
-    color: #8b0000;
-    text-decoration: none;
-}
-
-#hud {
-    margin-top: 90px;
-    font-size: 1.2rem;
-}
-
-#hud span {
-    display: inline-block;
-    background: #fff;
-    padding: 5px 10px;
-    border-radius: 8px;
-    margin: 0 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-canvas {
-    background: #fff5f5;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0;background:snow;font-family:Arial,Helvetica,sans-serif;color:#111}
+  header{
+    background:snow;
+    font-family:'Great Vibes',cursive;
+    color:#8b0000;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:18px;position:fixed;top:0;left:0;width:100%;z-index:1000;border-bottom:1px solid #eee
+  }
+  header i{color:#8b0000}
+  header a{color:#8b0000;text-decoration:none;font-family:'Great Vibes',cursive}
+  main{padding:110px 16px 24px;min-height:calc(100vh - 110px);display:flex;flex-direction:column;align-items:center;gap:12px}
+  #hud{font-size:1.05rem;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  #hud .pill{background:#fff;padding:6px 10px;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,0.06);font-weight:600}
+  .game-wrap{width:100%;max-width:760px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  canvas{background:linear-gradient(180deg,#fff6f6,#fff0f0);border-radius:12px;box-shadow:0 8px 26px rgba(0,0,0,0.08);touch-action:none;display:block;width:100%;height:auto}
+  button{background:#8b0000;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+  footer{margin-top:auto;padding:12px;text-align:center;background:transparent}
+  @media(max-width:520px){ main{padding-top:100px} header{font-size:1.3rem;padding:12px} }
 </style>
 </head>
 <body>
 
 <header>
-    <i class="fas fa-heart"></i>
-    <a href="index.html">Edin & Sudenaz</a>
-    <i class="fas fa-heart"></i>
+  <i class="fas fa-heart"></i>
+  <a href="index.html">Edin & Sudenaz</a>
+  <i class="fas fa-heart"></i>
 </header>
 
-<h1>Fang die Herzen ❤️</h1>
-<div id="hud">
-    <span>Score: <span id="score">0</span></span>
-    <span>Best: <span id="best">0</span></span>
-    <span>Verpasst: <span id="missed">0</span>/5</span>
-</div>
+<main>
+  <div class="game-wrap">
+    <h1 style="margin:0">Fang die Herzen ❤️</h1>
 
-<canvas id="gameCanvas"></canvas>
+    <div id="hud">
+      <div class="pill">Score: <span id="score">0</span></div>
+      <div class="pill">Best: <span id="best">0</span></div>
+      <div class="pill">Verpasst: <span id="missed">0</span>/5</div>
+      <button id="restartBtn" style="display:none">🔄 Neu starten</button>
+    </div>
 
-<footer style="margin-top:30px;">
-    <a href="entdecken.html">Entdecken</a> | 
-    <a href="einkaufen.html">Einkaufen</a> |
-    <a href="kontaktieren.html">Kontaktieren</a> 
+    <canvas id="gameCanvas" aria-label="Herzen Fang Spiel"></canvas>
+
+    <div style="max-width:700px;color:#444;text-align:center">
+      Tippe/klicke Herzen zum sofortigen Einsammeln. Bewege den Korb mit Maus, Touch (ziehen) oder Pfeiltasten.
+    </div>
+  </div>
+</main>
+
+<footer>
+  <a href="entdecken.html">Entdecken</a> |
+  <a href="einkaufen.html">Einkaufen</a> |
+  <a href="kontaktieren.html">Kontaktieren</a>
 </footer>
 
 <script>
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+/* ---------- Config ---------- */
+const CONFIG = {
+  maxObjects: 5,            // 4-5 Objekte gleichzeitig
+  baseSpawnMs: 1100,
+  minSpawnMs: 300,
+  spawnCurve: 10,         // wie stark spawn schneller wird pro Score
+  baseFallSpeed: 1.6,
+  speedIncreaseEvery: 8,
+  missedLimit: 5
+};
 
-function resizeCanvas() {
-    canvas.width = Math.min(window.innerWidth - 20, 500);
-    canvas.height = Math.min(window.innerHeight * 0.6, 600);
+/* ---------- Canvas / Resize ---------- */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let width=300, height=400;
+function resizeCanvas(){
+  const maxW = 760;
+  const w = Math.min(maxW, Math.max(320, window.innerWidth - 40));
+  const h = Math.round(w * 0.8);
+  canvas.width = w;
+  canvas.height = h;
+  width = canvas.width; height = canvas.height;
+  // adjust basket size
+  placeBasket();
 }
+window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
 
-let basket = { x: canvas.width / 2 - 30, y: canvas.height - 40, width: 60, height: 20 };
-let objects = [];
+/* ---------- State ---------- */
+let basket = { x:0, y:0, width:70, height:18 };
+function placeBasket(){
+  basket.width = Math.max(48, Math.round(width * 0.14));
+  basket.height = Math.max(12, Math.round(height * 0.035));
+  basket.x = (width - basket.width)/2;
+  basket.y = height - basket.height - 8;
+}
+placeBasket();
+
+let objects = []; // {x,y,vy,type}
 let score = 0;
 let missed = 0;
-let speed = 2;
-let spawnRate = 1000; // ms
-let bestScore = localStorage.getItem("bestScore") || 0;
-document.getElementById("best").innerText = bestScore;
+let running = true;
+let best = Number(localStorage.getItem('eds_best') || 0);
+document.getElementById('best').textContent = best;
 
-const types = [
-    { emoji: "🧡", points: 1, bad: false, chance: 0.6 },
-    { emoji: "🖕", points: -1, bad: true, chance: 0.1 },
-    { emoji: "❤️", points: 2, bad: false, chance: 0.25 },
-    { emoji: "💎", points: 5, bad: false, chance: 0.05 }
+/* ---------- Types (weights sum to 1) ---------- */
+const TYPES = [
+  { id:'orange', emoji:'🧡', points:1, bad:false, weight:0.60 },
+  { id:'red',    emoji:'❤️', points:2, bad:false, weight:0.25 },
+  { id:'diamond',emoji:'💎', points:5, bad:false, weight:0.05 },
+  { id:'flip',   emoji:'🖕', points:-1, bad:true, weight:0.10 }
 ];
 
-function drawBasket() {
-    ctx.fillStyle = "pink";
-    ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+function pickType(){
+  const r = Math.random();
+  let acc=0;
+  for(const t of TYPES){
+    acc += t.weight;
+    if(r <= acc) return t;
+  }
+  return TYPES[0];
 }
 
-function spawnObject() {
-    let r = Math.random();
-    let cumulative = 0;
-    for (let t of types) {
-        cumulative += t.chance;
-        if (r <= cumulative) {
-            objects.push({ 
-                type: t, 
-                x: Math.random() * (canvas.width - 30), 
-                y: -20 
-            });
-            break;
-        }
-    }
+/* ---------- Spawn / difficulty ---------- */
+let spawnTimer = null;
+function scheduleSpawn(){
+  if(spawnTimer) clearTimeout(spawnTimer);
+  // spawn interval decreases with score
+  const next = Math.max(CONFIG.minSpawnMs, CONFIG.baseSpawnMs - score * CONFIG.spawnCurve);
+  spawnTimer = setTimeout(()=>{
+    if(running && objects.length < CONFIG.maxObjects) spawnOne();
+    scheduleSpawn();
+  }, next);
+}
+function spawnOne(){
+  const t = pickType();
+  const margin = Math.round(width*0.06);
+  const x = Math.random() * (width - margin*2) + margin;
+  const base = CONFIG.baseFallSpeed + Math.floor(score / CONFIG.speedIncreaseEvery) * 0.35;
+  const vy = base + Math.random()*0.7;
+  objects.push({ x, y: -30, vy, type: t });
+}
+scheduleSpawn();
+
+/* ensure always ~maxObjects */
+function maintainObjects(){
+  while(running && objects.length < Math.min(CONFIG.maxObjects, 5)) spawnOne();
 }
 
-function drawObjects() {
-    ctx.font = "24px Arial";
-    objects.forEach(o => {
-        ctx.fillText(o.type.emoji, o.x, o.y);
-        o.y += speed;
-    });
-}
-
-function checkCollisions() {
-    objects = objects.filter(o => {
-        if (o.y > basket.y && o.x > basket.x - 15 && o.x < basket.x + basket.width) {
-            score += o.type.points;
-            document.getElementById("score").innerText = score;
-            if (score > bestScore) {
-                bestScore = score;
-                localStorage.setItem("bestScore", bestScore);
-                document.getElementById("best").innerText = bestScore;
-            }
-            return false;
-        }
-        if (o.y > canvas.height) {
-            if (!o.type.bad) {
-                missed++;
-                document.getElementById("missed").innerText = missed;
-                if (missed >= 5) {
-                    alert("Game Over! Dein Score: " + score);
-                    resetGame();
-                }
-            }
-            return false;
-        }
-        return true;
-    });
-}
-
-function resetGame() {
-    score = 0;
-    missed = 0;
-    speed = 2;
-    spawnRate = 1000;
-    document.getElementById("score").innerText = score;
-    document.getElementById("missed").innerText = missed;
-    objects = [];
-}
-
-function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBasket();
-    drawObjects();
-    checkCollisions();
-    requestAnimationFrame(gameLoop);
-}
-
-setInterval(() => {
-    spawnObject();
-    if (score % 10 === 0 && score > 0) {
-        speed += 0.2;
-        spawnRate = Math.max(300, spawnRate - 20);
-    }
-}, spawnRate);
-
-// Steuerung per Tastatur
-document.addEventListener("keydown", e => {
-    if (e.key === "ArrowRight") basket.x = Math.min(canvas.width - basket.width, basket.x + 20);
-    if (e.key === "ArrowLeft") basket.x = Math.max(0, basket.x - 20);
+/* ---------- Input Handling ---------- */
+let leftPressed=false, rightPressed=false;
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowLeft') leftPressed = true;
+  if(e.key === 'ArrowRight') rightPressed = true;
+});
+document.addEventListener('keyup', e=>{
+  if(e.key === 'ArrowLeft') leftPressed = false;
+  if(e.key === 'ArrowRight') rightPressed = false;
 });
 
-// Touchsteuerung
-canvas.addEventListener("touchmove", e => {
-    e.preventDefault();
-    let touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
-    basket.x = touchX - basket.width / 2;
-}, { passive: false });
-
-// Maussteuerung
-canvas.addEventListener("mousemove", e => {
-    let mouseX = e.clientX - canvas.getBoundingClientRect().left;
-    basket.x = mouseX - basket.width / 2;
+// mouse move (desktop)
+let mouseDown=false;
+canvas.addEventListener('mousedown', ()=>mouseDown=true);
+window.addEventListener('mouseup', ()=>mouseDown=false);
+canvas.addEventListener('mousemove', e=>{
+  if(mouseDown || e.buttons === 1){
+    const r = canvas.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    basket.x = Math.min(Math.max(0, x - basket.width/2), width - basket.width);
+  } else {
+    // optional: hover controls even without click
+    const r = canvas.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    basket.x = Math.min(Math.max(0, x - basket.width/2), width - basket.width);
+  }
 });
 
-gameLoop();
-</script>
+// touch drag (mobile) — prevent page scroll
+canvas.addEventListener('touchstart', e=>e.preventDefault(), {passive:false});
+canvas.addEventListener('touchmove', e=>{
+  e.preventDefault();
+  const r = canvas.getBoundingClientRect();
+  const x = e.touches[0].clientX - r.left;
+  basket.x = Math.min(Math.max(0, x - basket.width/2), width - basket.width);
+}, {passive:false});
 
-</body>
-</html>
+// click/tap to collect object directly
+canvas.addEventListener('click', e=>{
+  const r = canvas.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  // check objects from top
+  for(let i=objects.length-1;i>=0;i--){
+    const o = objects[i];
+    const dx = x - o.x, dy = y - o.y;
+    if(Math.hypot(dx,dy) < Math.max(28, height*0.06)){
+      collectObject(i);
+      break;
+    }
+  }
+});
+
+/* ---------- Collect / Miss logic ---------- */
+function collectObject(index){
+  const o = objects[index];
+  if(!o) return;
+  score += o.type.points;
+  // stinkefinger caught = penalty AND counts as missed
+  if(o.type.bad){
+    missed++;
+  }
+  if(score < 0) score = 0;
+  updateHU
+
 
