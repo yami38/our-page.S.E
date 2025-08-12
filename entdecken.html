@@ -1,239 +1,286 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edin & Sudenaz</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edin & Sudenaz</title>
 
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-html, body {
-    margin: 0;
-    padding: 0;
-    background-color: snow;
-    font-family: Times New Roman, sans-serif;
-    color: black;
-    text-align: center;
-    overflow-x: hidden;
-}
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: snow;
+            font-family: 'Times New Roman', Times, serif;
+            color: black;
+            text-align: center;
+            overflow-x: hidden;
+        }
 
-header {
-    background-color: snow;
-    color: black;
-    font-family: 'Great Vibes', cursive;
-    font-size: 1.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    border-bottom: 1px solid #ddd;
-}
+        header {
+            background-color: snow;
+            color: black;
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #ddd;
+        }
 
-header i {
-    color: #8b0000;
-}
+        header i {
+            color: #8b0000;
+        }
 
-header a {
-    font-family: 'Great Vibes', cursive;
-    color: #8b0000;
-    text-decoration: none;
-}
+        header a {
+            font-family: 'Great Vibes', cursive;
+            color: #8b0000;
+            text-decoration: none;
+        }
 
-#hud {
-    margin-top: 90px;
-    font-size: 1.2rem;
-}
+        #hud {
+            margin-top: 90px;
+            font-size: 1.2rem;
+        }
 
-#hud span {
-    display: inline-block;
-    background: #fff;
-    padding: 5px 10px;
-    border-radius: 8px;
-    margin: 0 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+        #hud span {
+            display: inline-block;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 8px;
+            margin: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-canvas {
-    background: #fff5f5;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-}
-</style>
+        canvas {
+            background: #fff5f5;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        footer {
+            margin: 30px 0;
+        }
+
+        footer a {
+            color: #8b0000;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                font-size: 1.2rem;
+                padding: 10px;
+            }
+            #hud {
+                font-size: 1rem;
+                margin-top: 70px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <i class="fas fa-heart"></i>
+        <a href="index.html">Edin & Sudenaz</a>
+        <i class="fas fa-heart"></i>
+    </header>
 
-<header>
-    <i class="fas fa-heart"></i>
-    <a href="index.html">Edin & Sudenaz</a>
-    <i class="fas fa-heart"></i>
-</header>
+    <h1>Fang die Herzen</h1>
+    <div id="hud">
+        <span>Score: <span id="score">0</span></span>
+        <span>Best: <span id="best">0</span></span>
+        <span>Verpasst: <span id="missed">0</span>/5</span>
+    </div>
 
-<h1>Fang die Herzen</h1>
-<div id="hud">
-    <span>Score: <span id="score">0</span></span>
-    <span>Best: <span id="best">0</span></span>
-    <span>Verpasst: <span id="missed">0</span>/5</span>
-</div>
+    <canvas id="gameCanvas"></canvas>
 
-<canvas id="gameCanvas"></canvas>
+    <footer>
+        <a href="entdecken.html">Entdecken</a> | 
+        <a href="einkaufen.html">Einkaufen</a> | 
+        <a href="kontaktieren.html">Kontaktieren</a>
+    </footer>
 
-<footer style="margin-top:30px;">
-    <a href="entdecken.html">Entdecken</a> | 
-    <a href="einkaufen.html">Einkaufen</a> |
-    <a href="kontaktieren.html">Kontaktieren</a> 
-</footer>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-<script>
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+        if (!ctx) {
+            console.error("Canvas context not supported");
+            alert("Dein Browser unterstützt kein Canvas. Bitte benutze einen modernen Browser.");
+            throw new Error("Canvas context not supported");
+        }
 
-function resizeCanvas() {
-    canvas.width = Math.min(window.innerWidth - 20, 500);
-    canvas.height = Math.min(window.innerHeight * 0.6, 600);
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+        function resizeCanvas() {
+            canvas.width = Math.min(window.innerWidth - 20, 500);
+            canvas.height = Math.min(window.innerHeight * 0.6, 600);
+            // Basket-Position bei Resize anpassen
+            basket.x = Math.max(0, Math.min(canvas.width - basket.width, basket.x));
+        }
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
 
-let basket = { x: canvas.width / 2 - 30, y: canvas.height - 40, width: 60, height: 20 };
-let objects = [];
-let score = 0;
-let missed = 0;
-let speed = 2;
-let spawnRate = 1000;
-let spawnTimer = 0;
-let bestScore = localStorage.getItem("bestScore") || 0;
-document.getElementById("best").innerText = bestScore;
+        let basket = { x: canvas.width / 2 - 30, y: canvas.height - 40, width: 60, height: 20 };
+        let objects = [];
+        let score = 0;
+        let missed = 0;
+        let speed = 2;
+        let spawnRate = 1000;
+        let lastTime = 0;
 
-const types = [
-    { emoji: "🧡", points: 1, bad: false, chance: 0.5 },
-    { emoji: "🖕", points: -1, bad: true, chance: 0.1 },
-    { emoji: "❤️", points: 2, bad: false, chance: 0.25 },
-    { emoji: "💎", points: 5, bad: false, chance: 0.05 },
-    { emoji: "⭐", points: 3, bad: false, chance: 0.1 }
-];
+        // Best Score aus localStorage laden
+        let bestScore = 0;
+        try {
+            bestScore = parseInt(localStorage.getItem("bestScore")) || 0;
+        } catch (e) {
+            console.warn("Fehler beim Laden von localStorage:", e);
+        }
+        document.getElementById("best").innerText = bestScore;
 
-function drawBasket() {
-    ctx.fillStyle = "pink";
-    ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
-}
+        const types = [
+            { emoji: "🧡", points: 1, bad: false, chance: 0.5 },
+            { emoji: "🖕", points: -1, bad: true, chance: 0.1 },
+            { emoji: "❤️", points: 2, bad: false, chance: 0.25 },
+            { emoji: "💎", points: 5, bad: false, chance: 0.05 },
+            { emoji: "⭐", points: 3, bad: false, chance: 0.1 }
+        ];
 
-function spawnObject() {
-    let r = Math.random();
-    let cumulative = 0;
-    for (let t of types) {
-        cumulative += t.chance;
-        if (r <= cumulative) {
-            objects.push({ 
-                type: t, 
-                x: Math.random() * (canvas.width - 30), 
-                y: -20 
+        function drawBasket() {
+            ctx.fillStyle = "pink";
+            ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+        }
+
+        function spawnObject() {
+            let r = Math.random();
+            let cumulative = 0;
+            for (let t747 of types) {
+                cumulative += t747.chance;
+                if (r <= cumulative) {
+                    objects.push({ 
+                        type: t747, 
+                        x: Math.random() * (canvas.width - 30), 
+                        y: -20 
+                    });
+                    break;
+                }
+            }
+        }
+
+        function drawObjects() {
+            ctx.font = "28px Arial";
+            ctx.textBaseline = "top";
+            objects.forEach(o => {
+                ctx.fillStyle = "black";
+                ctx.fillText(o.type.emoji, o.x, o.y);
+                o.y += speed;
             });
-            break;
         }
-    }
-}
 
-function drawObjects() {
-    ctx.font = "28px Arial";
-    ctx.textBaseline = "top";
-    objects.forEach(o => {
-        ctx.fillStyle = "black";
-        ctx.fillText(o.type.emoji, o.x, o.y);
-        o.y += speed;
-    });
-}
+        function checkCollisions() {
+            objects = objects.filter(o => {
+                if (o.y > basket.y && o.x > basket.x - 15 && o.x < basket.x + basket.width) {
+                    score += o.type.points;
+                    document.getElementById("score").innerText = score;
+                    if (score > bestScore) {
+                        bestScore = score;
+                        try {
+                            localStorage.setItem("bestScore", bestScore);
+                        } catch (e) {
+                            console.warn("Fehler beim Speichern von localStorage:", e);
+                        }
+                        document.getElementById("best").innerText = bestScore;
+                    }
+                    return false;
+                }
+                if (o.y > canvas.height) {
+                    if (!o.type.bad) {
+                        missed++;
+                        document.getElementById("missed").innerText = missed;
+                        if (missed >= 5) {
+                            alert("Game Over! Dein Score: " + score);
+                            resetGame();
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            });
+        }
 
-function checkCollisions() {
-    objects = objects.filter(o => {
-        if (o.y > basket.y && o.x > basket.x - 15 && o.x < basket.x + basket.width) {
-            score += o.type.points;
+        function resetGame() {
+            score = 0;
+            missed = 0;
+            speed = 2;
+            spawnRate = 1000;
+            objects = [];
             document.getElementById("score").innerText = score;
-            if (score > bestScore) {
-                bestScore = score;
-                localStorage.setItem("bestScore", bestScore);
-                document.getElementById("best").innerText = bestScore;
-            }
-            return false;
-        }
-        if (o.y > canvas.height) {
-            missed++;
             document.getElementById("missed").innerText = missed;
-            if (missed >= 5) {
-                alert("Game Over! Dein Score: " + score);
-                resetGame();
-            }
-            return false;
         }
-        return true;
-    });
-}
 
-function resetGame() {
-    score = 0;
-    missed = 0;
-    speed = 2;
-    spawnRate = 1000;
-    spawnTimer = 0;
-    document.getElementById("score").innerText = score;
-    document.getElementById("missed").innerText = missed;
-    objects = [];
-}
+        function gameLoop(timestamp) {
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
 
-function gameLoop(timestamp) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBasket();
-    drawObjects();
-    checkCollisions();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBasket();
+            drawObjects();
+            checkCollisions();
 
-    spawnTimer += 16; 
-    if (spawnTimer >= spawnRate) {
-        spawnObject();
-        spawnTimer = 0;
-    }
+            if (deltaTime > 0) {
+                const spawnTimer = deltaTime / spawnRate;
+                if (spawnTimer >= 1) {
+                    spawnObject();
+                }
+            }
 
-    if (score > 0 && score % 10 === 0) {
-        speed = 2 + score * 0.05;
-        spawnRate = Math.max(300, 1000 - score * 10);
-    }
+            if (score > 0 && score % 10 === 0 && objects.length < 10) {
+                speed = Math.min(5, 2 + score * 0.05); // Geschwindigkeit begrenzen
+                spawnRate = Math.max(300, 1000 - score * 10);
+            }
 
-    requestAnimationFrame(gameLoop);
-}
+            requestAnimationFrame(gameLoop);
+        }
 
-// Steuerung per Tastatur
-document.addEventListener("keydown", e => {
-    if (e.key === "ArrowRight") basket.x = Math.min(canvas.width - basket.width, basket.x + 20);
-    if (e.key === "ArrowLeft") basket.x = Math.max(0, basket.x - 20);
-});
+        // Steuerung per Tastatur
+        document.addEventListener("keydown", e => {
+            if (e.key === "ArrowRight") {
+                basket.x = Math.min(canvas.width - basket.width, basket.x + 20);
+            }
+            if (e.key === "ArrowLeft") {
+                basket.x = Math.max(0, basket.x - 20);
+            }
+        });
 
-// Touchsteuerung
-canvas.addEventListener("touchmove", e => {
-    e.preventDefault();
-    let touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
-    basket.x = touchX - basket.width / 2;
-}, { passive: false });
+        // Touchsteuerung
+        canvas.addEventListener("touchmove", e => {
+            e.preventDefault();
+            let touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+            basket.x = Math.max(0, Math.min(canvas.width - basket.width, touchX - basket.width / 2));
+        }, { passive: false });
 
-// Maussteuerung
-canvas.addEventListener("mousemove", e => {
-    let mouseX = e.clientX - canvas.getBoundingClientRect().left;
-    basket.x = mouseX - basket.width / 2;
-});
+        // Maussteuerung
+        canvas.addTouchEventListener("mousemove", e => {
+            let mouseX = e.clientX - canvas.getBoundingClientRect().left;
+            basket.x = Math.max(0, Math.min(canvas.width - basket.width, mouseX - basket.width / 2));
+        });
 
-gameLoop();
-</script>
-
+        // Spiel starten
+        requestAnimationFrame(gameLoop);
+    </script>
 </body>
 </html>
-
-
