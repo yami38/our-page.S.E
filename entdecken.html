@@ -63,6 +63,18 @@
             margin: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        
+        #startBtn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
 
         canvas {
             background: #fff5f5;
@@ -113,6 +125,7 @@
     <p>⭐ 3 Punkte     💎 5 Punkte</p>
     <p>     🖕 -20 Punkte</p>
     <div id="hud">
+        <button id="startBtn">Start</button><br>
         <span>Score: <span id="score">0</span></span>
         <span>Best: <span id="best">0</span></span>
         <span>Verpasst: <span id="missed">0</span>/5</span>
@@ -236,6 +249,16 @@
                 return true;
             });
         }
+    let gameRunning = false;
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+        resetGame();
+        gameRunning = true;
+        document.getElementById("startBtn").style.display = "none";
+        lastTime = 0;
+        requestAnimationFrame(gameLoop);
+    });
+
 
 
     function resetGame() {
@@ -246,6 +269,9 @@
         objects = [];
         document.getElementById("score").innerText = score;
         document.getElementById("missed").innerText = missed;
+        gameRunning = false;
+        document.getElementById("startBtn").style.display = "inline-block";
+
     }
 
     function gameLoop(timestamp) {
@@ -287,6 +313,8 @@
         let mouseX = e.clientX - canvas.getBoundingClientRect().left;
         basket.x = Math.max(0, Math.min(canvas.width - basket.width, mouseX - basket.width / 2));
     });
+
+    
 
     requestAnimationFrame(gameLoop);
 </script>
