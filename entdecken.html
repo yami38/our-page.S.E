@@ -82,7 +82,7 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             display: block;
-            border: 1px solid #ddd; /* Debugging: Sichtbare Canvas-Grenze */
+            border: 1px solid #ddd;
         }
 
         footer {
@@ -123,7 +123,7 @@
     <h2>Fang die Herzen</h2>
     <p>🧡 1 Punkt      ❤️ 2 Punkte</p>
     <p>⭐ 3 Punkte     💎 5 Punkte</p>
-    <p>     🖕 -20 Punkte</p>
+    <p>🖕 -20 Punkte</p>
     <div id="hud">
         <button id="startBtn">Start</button><br>
         <span>Score: <span id="score">0</span></span>
@@ -139,7 +139,6 @@
         <a href="kontaktieren.html">Kontaktieren</a>
     </footer>
 
-
 <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
@@ -153,6 +152,7 @@
     let lastSpawn = 0;
     let lastTime = 0;
     let bestScore = parseInt(localStorage.getItem("bestScore") || "0");
+    let gameRunning = false;
 
     document.getElementById("best").innerText = bestScore;
 
@@ -206,50 +206,40 @@
         });
     }
 
-     function checkCollisions() {
-            objects = objects.filter(o => {
-                const basketTop = basket.y;
-                const basketBottom = basket.y + basket.height;
-                const basketLeft = basket.x;
-                const basketRight = basket.x + basket.width;
-                const objBottom = o.y + o.height;
-                const objLeft = o.x;
-                const objRight = o.x + o.width;
+    function checkCollisions() {
+        objects = objects.filter(o => {
+            const basketTop = basket.y;
+            const basketBottom = basket.y + basket.height;
+            const basketLeft = basket.x;
+            const basketRight = basket.x + basket.width;
+            const objBottom = o.y + o.height;
+            const objLeft = o.x;
+            const objRight = o.x + o.width;
 
-                if (objBottom > basketTop && o.y < basketBottom && objRight > basketLeft && objLeft < basketRight) {
-                    score += o.type.points;
-                    const scoreElement = document.getElementById("score");
-                    if (scoreElement) scoreElement.innerText = score;
-                    try {
-                        const bestElement = document.getElementById("best");
-                        if (bestElement && score > bestScore) {
-                            bestScore = score;
-                            bestElement.innerText = score;
-                            localStorage.setItem("bestScore", score);
-                        }
-                    } catch (e) {
-                        console.warn("Fehler beim Speichern von localStorage:", e);
-                    }
-                    console.log("Collision detected, score:", score);
-                    return false;
+            if (objBottom > basketTop && o.y < basketBottom && objRight > basketLeft && objLeft < basketRight) {
+                score += o.type.points;
+                document.getElementById("score").innerText = score;
+                if (score > bestScore) {
+                    bestScore = score;
+                    document.getElementById("best").innerText = score;
+                    localStorage.setItem("bestScore", score);
                 }
-                if (o.y > canvas.height) {
-                    if (!o.type.bad) {
-                        missed++;
-                        const missedElement = document.getElementById("missed");
-                        if (missedElement) missedElement.innerText = missed;
-                        if (missed >= 5) {
-                            alert("Game Over! Dein Score: " + score);
-                            resetGame();
-                        }
+                return false;
+            }
+            if (o.y > canvas.height) {
+                if (!o.type.bad) {
+                    missed++;
+                    document.getElementById("missed").innerText = missed;
+                    if (missed >= 5) {
+                        alert("Game Over! Dein Score: " + score);
+                        resetGame();
                     }
-                    console.log("Object missed:", o.type.emoji);
-                    return false;
                 }
-                return true;
-            });
-        }
-    let gameRunning = false;
+                return false;
+            }
+            return true;
+        });
+    }
 
     document.getElementById("startBtn").addEventListener("click", () => {
         resetGame();
@@ -259,8 +249,6 @@
         requestAnimationFrame(gameLoop);
     });
 
-
-
     function resetGame() {
         score = 0;
         missed = 0;
@@ -269,12 +257,10 @@
         objects = [];
         document.getElementById("score").innerText = score;
         document.getElementById("missed").innerText = missed;
-        gameRunning = false;
-        document.getElementById("startBtn").style.display = "inline-block";
-
     }
 
     function gameLoop(timestamp) {
+        if (!gameRunning) return; // <--- NEU: Stoppt, wenn Spiel nicht läuft
         if (!lastTime) lastTime = timestamp;
         const deltaTime = timestamp - lastTime;
         lastTime = timestamp;
@@ -313,10 +299,6 @@
         let mouseX = e.clientX - canvas.getBoundingClientRect().left;
         basket.x = Math.max(0, Math.min(canvas.width - basket.width, mouseX - basket.width / 2));
     });
-
-    
-
-    requestAnimationFrame(gameLoop);
 </script>
 </body>
-</html> 
+</html>
