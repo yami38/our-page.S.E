@@ -12,13 +12,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-/* ========== Base ========== */
 :root{
   --bg:snow;
   --text:#111;
   --muted:#555;
-  --accent:#8b0000;        /* dunkles Rot */
-  --accent-2:#b22222;      /* etwas heller fürs Hover */
+  --accent:#8b0000;
+  --accent-2:#b22222;
   --card:#fff;
   --shadow:0 8px 24px rgba(0,0,0,.08);
   --radius:14px;
@@ -34,170 +33,60 @@ html,body{
   display:flex;
   flex-direction:column;
 }
-
-/* ========== Header ========== */
 header{
-  position:fixed; inset:0 0 auto 0;
+  position:fixed;
+  top:0; left:0; width:100%;
   background:var(--bg);
-  z-index:1000;
   box-shadow:0 2px 12px rgba(0,0,0,.06);
+  z-index:1000;
 }
 .header-inner{
-  max-width:1100px; margin:0 auto; padding:14px 18px;
+  max-width:1100px;
+  margin:0 auto;
+  padding:14px 18px;
   display:grid;
   grid-template-columns:1fr auto 1fr;
-  align-items:center; gap:12px;
+  align-items:center;
 }
 .brand{
-  display:flex; align-items:center; gap:10px; font-size:1.6rem;
-  color:var(--accent);
-  text-decoration:none;
-  justify-self:start;
-  font-family:'Great Vibes', cursive;
+  display:flex; align-items:center; gap:10px;
+  font-size:1.6rem; color:var(--accent);
+  text-decoration:none; font-family:'Great Vibes', cursive;
 }
-.brand i{ color:var(--accent); font-size:1.6rem; }
-.brand span{ color:var(--accent); }
-
-.header-actions{
-  justify-self:end; display:flex; align-items:center; gap:14px;
-}
-.coins{
-  font-size:.95rem; color:var(--muted);
-  background:#fff; padding:6px 10px; border-radius:999px; box-shadow:var(--shadow);
-}
-.cart-btn{
-  position:relative; border:none; background:var(--accent); color:#fff;
-  padding:10px 14px; border-radius:999px; cursor:pointer;
-  box-shadow:var(--shadow);
-  display:flex; align-items:center; gap:8px;
-}
-.cart-btn:hover{ background:var(--accent-2); }
-.cart-count{
-  position:absolute; top:-6px; right:-6px; background:#111; color:#fff;
-  border-radius:999px; font-size:.75rem; padding:2px 6px; min-width:20px; text-align:center;
-}
-
-/* ========== Main ========== */
+.brand i{ color:var(--accent); }
+.header-actions{ justify-self:end; display:flex; gap:14px; align-items:center; }
+.coins{ background:#fff; padding:6px 10px; border-radius:999px; box-shadow:var(--shadow); font-size:.95rem; }
+.cart-btn{ position:relative; border:none; background:var(--accent); color:#fff; padding:10px 14px; border-radius:999px; cursor:pointer; box-shadow:var(--shadow); }
+.cart-count{ position:absolute; top:-6px; right:-6px; background:#111; color:#fff; border-radius:999px; font-size:.75rem; padding:2px 6px; }
 main{ flex:1; padding:120px 22px 40px; }
 .container{ max-width:1100px; margin:0 auto; }
-.page-title{
-  text-align:center; margin:0 0 18px 0; font-size:2.2rem; font-weight:700;
-}
-.page-sub{
-  text-align:center; margin:0 0 26px 0; color:var(--muted);
-}
-
-/* ========== Grid ========== */
-.grid{
-  display:grid; gap:18px;
-  grid-template-columns:repeat(1,minmax(0,1fr));
-}
-@media (min-width:640px){ .grid{ grid-template-columns:repeat(2,1fr);} }
-@media (min-width:960px){ .grid{ grid-template-columns:repeat(3,1fr);} }
-
-.card{
-  background:var(--card); border-radius:var(--radius); overflow:hidden;
-  box-shadow:var(--shadow); display:flex; flex-direction:column;
-  border:1px solid rgba(0,0,0,.06);
-}
-.figure{
-  position:relative; aspect-ratio:16/10; overflow:hidden; background:#f4f4f4;
-}
-.figure img{ width:100%; height:100%; object-fit:cover; display:block; }
-.badge{
-  position:absolute; top:10px; left:10px; background:rgba(0,0,0,.8); color:#fff;
-  font-size:.8rem; padding:6px 10px; border-radius:999px;
-}
-.badge.sold{ background:#222; }
+.page-title{ text-align:center; font-size:2.2rem; margin-bottom:10px; }
+.page-sub{ text-align:center; margin-bottom:26px; color:var(--muted); }
+.grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+.card{ background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; }
+.figure{ position:relative; aspect-ratio:16/10; background:#eee; }
+.figure img{ width:100%; height:100%; object-fit:cover; }
+.badge{ position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.8); color:#fff; padding:6px 10px; border-radius:999px; font-size:.8rem; }
 .badge.fun{ background:var(--accent); }
-
-.card-body{ padding:14px 14px 16px; display:flex; flex-direction:column; gap:10px; }
-.title{ font-size:1.1rem; font-weight:700; }
-.desc{ color:var(--muted); font-size:.95rem; min-height:2.6em; }
-.price{
-  margin-top:auto; font-weight:700; font-size:1.05rem;
-}
+.card-body{ padding:14px; display:flex; flex-direction:column; gap:10px; }
+.title{ font-weight:700; }
+.desc{ color:var(--muted); font-size:.95rem; }
+.price{ font-weight:700; }
 .price.free{ color:var(--accent); }
-
-.actions{ display:flex; gap:10px; }
-.btn{
-  flex:1; border:none; padding:10px 12px; border-radius:10px; cursor:pointer;
-  background:#111; color:#fff; box-shadow:var(--shadow);
-}
-.btn.secondary{ background:#eaeaea; color:#111; }
-.btn.danger{ background:var(--accent); }
-.btn:disabled{ background:#cfcfcf; color:#777; cursor:not-allowed; }
-
-/* ========== Toasts ========== */
-.toast-wrap{
-  position:fixed; right:16px; top:90px; display:flex; flex-direction:column; gap:10px;
-  z-index:1200;
-}
-.toast{
-  background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow:var(--shadow);
-  animation: slideIn .25s ease-out;
-}
-.toast.error{ background:var(--accent); }
-.toast.ok{ background:#2e7d32; }
-@keyframes slideIn{ from{ transform:translateY(-8px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
-
-/* ========== Cart Drawer ========== */
-.drawer{
-  position:fixed; top:0; right:-420px; width:420px; max-width:92vw; height:100%;
-  background:#fff; box-shadow:-16px 0 36px rgba(0,0,0,.12);
-  z-index:1150; transition:right .28s ease;
-  display:flex; flex-direction:column;
-}
-.drawer.open{ right:0; }
-.drawer-header{
-  padding:16px; display:flex; align-items:center; justify-content:space-between;
-  border-bottom:1px solid rgba(0,0,0,.08);
-}
-.drawer-body{
-  padding:12px 16px; overflow:auto; flex:1; display:flex; flex-direction:column; gap:12px;
-}
-.cart-item{
-  display:grid; grid-template-columns:64px 1fr auto; gap:12px; align-items:center;
-  border:1px solid rgba(0,0,0,.06); border-radius:12px; padding:8px;
-}
-.cart-item img{ width:64px; height:48px; object-fit:cover; border-radius:8px; }
-.cart-item .name{ font-weight:600; }
-.cart-item .remove{ border:none; background:transparent; color:var(--muted); cursor:pointer; }
-
-.drawer-footer{
-  padding:16px; border-top:1px solid rgba(0,0,0,.08);
-  display:flex; flex-direction:column; gap:10px;
-}
-.total{ display:flex; justify-content:space-between; font-weight:700; }
-.checkout{ border:none; padding:12px; border-radius:10px; background:#111; color:#fff; cursor:not-allowed; }
-
-/* ========== Footer ========== */
-footer{
-  background:rgba(0,0,0,0.8); color:#fff; padding:16px; text-align:center;
-}
+.btn{ border:none; padding:10px; border-radius:10px; cursor:pointer; background:#111; color:#fff; }
+.btn:disabled{ background:#ccc; cursor:not-allowed; }
+footer{ background:rgba(0,0,0,0.8); color:#fff; padding:16px; text-align:center; }
 footer a{ color:MistyRose; text-decoration:none; margin:0 10px; }
-footer a:hover{ text-decoration:underline; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <a class="brand" href="index.html" aria-label="Startseite">
-      <i class="fas fa-heart"></i>
-      <span>Edin &amp; Sudenaz</span>
-      <i class="fas fa-heart"></i>
-    </a>
-
-    <!-- Mitte leer, der Brand steht im Fokus -->
-
+    <a class="brand" href="index.html"><i class="fas fa-heart"></i>Edin &amp; Sudenaz<i class="fas fa-heart"></i></a>
     <div class="header-actions">
-      <div class="coins" aria-live="polite">Coins: <strong id="coins">0</strong></div>
-      <button class="cart-btn" id="openCart" aria-label="Warenkorb öffnen">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span>Warenkorb</span>
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
+      <div class="coins">Coins: <strong id="coins">0</strong></div>
+      <button class="cart-btn" id="openCart"><i class="fa-solid fa-cart-shopping"></i><span class="cart-count" id="cartCount">0</span></button>
     </div>
   </div>
 </header>
@@ -206,251 +95,78 @@ footer a:hover{ text-decoration:underline; }
   <div class="container">
     <h1 class="page-title">Einkaufen</h1>
     <p class="page-sub">Nur zum Spaß – nix ist echt. Aber das Herz ist sowieso unbezahlbar. 💘</p>
+    <div class="grid">
+      <!-- Produktkarten -->
+      <div class="card">
+        <figure class="figure">
+          <img src="https://via.placeholder.com/400x250?text=Sudenaz+Herz" alt="Sudenaz Herz">
+          <span class="badge">Ausverkauft</span>
+        </figure>
+        <div class="card-body">
+          <div class="title">Sudenaz’ Herz</div>
+          <div class="desc">Unbezahlbar. Schon längst vergeben. 💝</div>
+          <div class="price">—</div>
+          <button class="btn" disabled>Ausverkauft</button>
+        </div>
+      </div>
 
-    <section class="grid" id="grid">
-      <!-- Produkte werden per JS befüllt -->
-    </section>
+      <div class="card">
+        <figure class="figure">
+          <img src="https://via.placeholder.com/400x250?text=Mercedes+CLS+63+AMG" alt="Mercedes CLS 63 AMG">
+        </figure>
+        <div class="card-body">
+          <div class="title">Mercedes CLS 63 AMG</div>
+          <div class="desc">V8-Blubbern für die Ohren. (nur in Träumen)</div>
+          <div class="price">189.000 €</div>
+          <button class="btn" onclick="notEnough()">In den Warenkorb</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <figure class="figure">
+          <img src="https://via.placeholder.com/400x250?text=Yuno" alt="Yuno">
+          <span class="badge">Ausverkauft</span>
+        </figure>
+        <div class="card-body">
+          <div class="title">Yuno</div>
+          <div class="desc">Charakter mit Attitude. Limitierte Edition.</div>
+          <div class="price">500 €</div>
+          <button class="btn" disabled>Ausverkauft</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <figure class="figure">
+          <img src="https://via.placeholder.com/400x250?text=Geschenk-Auto" alt="Geschenk Auto">
+          <span class="badge fun">Geschenk</span>
+        </figure>
+        <div class="card-body">
+          <div class="title">Auto (Name folgt)</div>
+          <div class="desc">Dein Geschenk – kostet 0 €. 🎁</div>
+          <div class="price free">0 €</div>
+          <button class="btn" onclick="addToCart('Auto (Name folgt)', 0)">In den Warenkorb</button>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 
-<!-- Toasts -->
-<div class="toast-wrap" id="toasts" aria-live="polite" aria-atomic="true"></div>
-
-<!-- Warenkorb-Drawer -->
-<aside class="drawer" id="drawer" aria-hidden="true">
-  <div class="drawer-header">
-    <strong>Dein Warenkorb</strong>
-    <button class="btn secondary" id="closeCart" aria-label="Warenkorb schließen">Schließen</button>
-  </div>
-  <div class="drawer-body" id="cartItems">
-    <div style="color:#666;">Noch nichts drin. Leg dein Geschenk rein! 🎁</div>
-  </div>
-  <div class="drawer-footer">
-    <div class="total"><span>Zwischensumme</span><span id="cartTotal">0,00&nbsp;€</span></div>
-    <button class="checkout" title="Nur Deko">Zur Kasse (deaktiviert)</button>
-    <small style="color:#777;">Hinweis: Alles nur Deko. Bei Preisen &gt; 0 € fehlende Coins 😉</small>
-  </div>
-</aside>
-
 <footer>
-  <a href="entdecken.html">Entdecken</a> |
-  <a href="einkaufen.html" aria-current="page">Einkaufen</a> |
+  <a href="entdecken.html">Entdecken</a> | 
+  <a href="einkaufen.html">Einkaufen</a> |
   <a href="kontaktieren.html">Kontaktieren</a>
 </footer>
 
 <script>
-/* ========= Hilfen ========= */
-const € = (n) => n.toLocaleString('de-DE',{style:'currency',currency:'EUR'});
-const byId = (id)=>document.getElementById(id);
-
-/* Platzhalter-Bild (eingebettete SVG, später einfach src ersetzen) */
-const ph = (text, color="#8b0000") =>
-  'data:image/svg+xml;utf8,'+encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
-      <defs>
-        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${color}" stop-opacity=".85"/>
-          <stop offset="100%" stop-color="#000000" stop-opacity=".85"/>
-        </linearGradient>
-      </defs>
-      <rect width="1200" height="750" fill="url(#g)"/>
-      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-            font-family="Arial, sans-serif" font-weight="700" font-size="64" fill="white">
-        ${text}
-      </text>
-    </svg>`);
-
-/* ========= Daten ========= */
-const COINS = 0; // absichtlich 0
-const products = [
-  {
-    id:'herz',
-    name:'Sudenaz’ Herz',
-    description:'Unbezahlbar. Schon längst vergeben. 💝',
-    price:null, // kein Preis
-    soldOut:true,
-    image: ph('Sudenaz’ Herz')
-  },
-  {
-    id:'cls63',
-    name:'Mercedes CLS 63 AMG',
-    description:'V8-Blubbern für die Ohren. (nur in Träumen)',
-    price:189000,
-    soldOut:false,
-    image: ph('Mercedes CLS 63 AMG')
-  },
-  {
-    id:'yuno',
-    name:'Yuno',
-    description:'Charakter mit Attitude. Limitierte Edition.',
-    price:500,
-    soldOut:true,
-    image: ph('Yuno', '#444')
-  },
-  {
-    id:'giftcar',
-    name:'Auto (Name folgt)',
-    description:'Dein Geschenk – kostet 0 €. Ab in den Warenkorb! 🎁',
-    price:0,
-    soldOut:false,
-    image: ph('Geschenk-Auto', '#b22222')
-  },
-  /* Lustige Zusatzartikel (alle > 0 € → nicht genug Coins) */
-  {
-    id:'mond',
-    name:'Mondschein im Glas',
-    description:'Leuchtet sanft, wenn du lächelst.',
-    price:9999,
-    soldOut:false,
-    image: ph('Mondschein')
-  },
-  {
-    id:'umarmung',
-    name:'Endlose Umarmung',
-    description:'Wird automatisch verlängert, wenn nötig.',
-    price:29,
-    soldOut:false,
-    image: ph('Umarmung', '#333')
-  },
-  {
-    id:'kaffee',
-    name:'Kaffee, der nie kalt wird',
-    description:'Perfekt für lange Gespräche zu zweit.',
-    price:12,
-    soldOut:false,
-    image: ph('Kaffee')
-  },
-  {
-    id:'vip',
-    name:'VIP-Ticket zu deinem Lächeln',
-    description:'Backstage-Zugang zu allen guten Launen.',
-    price:777,
-    soldOut:false,
-    image: ph('VIP')
-  }
-];
-
-/* ========= Render ========= */
-const grid = byId('grid');
-function renderProducts(){
-  grid.innerHTML = '';
-  products.forEach(p=>{
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.innerHTML = `
-      <figure class="figure">
-        <img src="${p.image}" alt="${p.name}">
-        ${p.soldOut ? `<span class="badge sold">Ausverkauft</span>` : ''}
-        ${p.price===0 ? `<span class="badge fun">Geschenk</span>` : ''}
-      </figure>
-      <div class="card-body">
-        <div class="title">${p.name}</div>
-        <div class="desc">${p.description}</div>
-        <div class="price ${p.price===0 ? 'free':''}">
-          ${p.price===null ? '—' : €(p.price)}
-        </div>
-        <div class="actions">
-          ${renderActionButton(p)}
-        </div>
-      </div>
-    `;
-    grid.appendChild(card);
-    wireAction(card, p);
-  });
+let cartCount = 0;
+function notEnough(){
+  alert('Sie haben nicht genug Coins.');
 }
-function renderActionButton(p){
-  if(p.soldOut) return `<button class="btn" disabled>Ausverkauft</button>`;
-  if(p.price===null) return `<button class="btn" disabled>Nicht verfügbar</button>`;
-  return `<button class="btn" data-add="${p.id}"><i class="fa-solid fa-cart-plus"></i>&nbsp;In den Warenkorb</button>`;
+function addToCart(name, price){
+  cartCount++;
+  document.getElementById('cartCount').textContent = cartCount;
+  alert(`${name} wurde in den Warenkorb gelegt!`);
 }
-
-/* ========= Toasts ========= */
-const toasts = byId('toasts');
-function toast(msg, type='ok'){
-  const el = document.createElement('div');
-  el.className = `toast ${type}`;
-  el.textContent = msg;
-  toasts.appendChild(el);
-  setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(-6px)'; }, 1900);
-  setTimeout(()=>{ el.remove(); }, 2300);
-}
-
-/* ========= Cart ========= */
-const drawer = byId('drawer');
-const openCartBtn = byId('openCart');
-const closeCartBtn = byId('closeCart');
-const cartCount = byId('cartCount');
-const cartItemsEl = byId('cartItems');
-const cartTotalEl = byId('cartTotal');
-
-let cart = [];
-
-function updateCartUI(){
-  cartCount.textContent = cart.reduce((n,i)=>n+i.qty,0);
-  if(cart.length===0){
-    cartItemsEl.innerHTML = `<div style="color:#666;">Noch nichts drin. Leg dein Geschenk rein! 🎁</div>`;
-    cartTotalEl.textContent = €(0);
-    return;
-  }
-  cartItemsEl.innerHTML = '';
-  let total = 0;
-  cart.forEach(it=>{
-    total += (it.price||0) * it.qty;
-    const row = document.createElement('div');
-    row.className = 'cart-item';
-    row.innerHTML = `
-      <img src="${it.image}" alt="${it.name}">
-      <div>
-        <div class="name">${it.name}</div>
-        <div style="color:#777; font-size:.9rem;">${it.price===0 ? 'Kostenlos' : €(it.price)} × ${it.qty}</div>
-      </div>
-      <button class="remove" aria-label="Entfernen" title="Entfernen">&times;</button>
-    `;
-    row.querySelector('.remove').addEventListener('click', ()=>{
-      cart = cart.filter(c=>c.id!==it.id);
-      updateCartUI();
-    });
-    cartItemsEl.appendChild(row);
-  });
-  cartTotalEl.textContent = €(total);
-}
-
-function addToCart(p){
-  // Regeln:
-  // - Preis null -> erlaubt
-  // - Preis > 0 -> Fehler wegen Coins
-  if(p.price>0){
-    toast('Sie haben nicht genug Coins.', 'error');
-    return;
-  }
-  if(p.soldOut || p.price===null){
-    toast('Leider nicht verfügbar.', 'error');
-    return;
-  }
-  const exist = cart.find(c=>c.id===p.id);
-  if(exist){ exist.qty += 1; }
-  else{ cart.push({ id:p.id, name:p.name, price:p.price||0, qty:1, image:p.image }); }
-  updateCartUI();
-  toast(`${p.name} wurde in den Warenkorb gelegt.`, 'ok');
-}
-
-/* ========= Events ========= */
-function wireAction(card, product){
-  const btn = card.querySelector('[data-add]');
-  if(!btn) return;
-  btn.addEventListener('click', ()=> addToCart(product));
-}
-
-openCartBtn.addEventListener('click', ()=>{
-  drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false');
-});
-closeCartBtn.addEventListener('click', ()=>{
-  drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true');
-});
-
-/* Init */
-renderProducts();
-updateCartUI();
 </script>
 
 </body>
