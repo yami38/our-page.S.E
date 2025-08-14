@@ -1,185 +1,207 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Einkaufen – Edin &amp; Sudenaz</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einkaufen – Edin & Sudenaz</title>
 
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <!-- Schrift & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --accent: #b30000;
+      --background: #fff8f8;
+    }
 
-<style>
-:root{
-  --bg:snow;
-  --text:#111;
-  --muted:#555;
-  --accent:#8b0000;
-  --accent-2:#b22222;
-  --card:#fff;
-  --shadow:0 8px 24px rgba(0,0,0,.08);
-  --radius:14px;
-}
-*{box-sizing:border-box}
-html,body{
-  margin:0;
-  padding:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family: "Times New Roman", serif;
-  min-height:100%;
-  display:flex;
-  flex-direction:column;
-}
-header{
-  position:fixed;
-  top:0; left:0; width:100%;
-  background:var(--bg);
-  box-shadow:0 2px 12px rgba(0,0,0,.06);
-  z-index:1000;
-}
-.header-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 18px;
-  display: flex;
-  justify-content: flex-end; /* Coins + Warenkorb rechts */
-  align-items: center;
-  position: relative;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      text-align: center;
+    }
 
-.brand {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.6rem;
-  font-family: 'Great Vibes', cursive;
-  color: var(--accent);
-  text-decoration: none;
-}
+    /* ===== HEADER ===== */
+    header {
+      background: var(--background);
+      padding: 10px 0;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
 
-}
-.brand i{ color:var(--accent);
-          font-size: 1.6rem;}
-.header-actions{ justify-self:end; display:flex; gap:14px; align-items:center; }
-.coins{ background:#fff; padding:6px 10px; border-radius:999px; box-shadow:var(--shadow); font-size:.95rem; }
-.cart-btn{ position:relative; border:none; background:var(--accent); color:#fff; padding:10px 14px; border-radius:999px; cursor:pointer; box-shadow:var(--shadow); }
-.cart-count{ position:absolute; top:-6px; right:-6px; background:#111; color:#fff; border-radius:999px; font-size:.75rem; padding:2px 6px; }
-main{ flex:1; padding:120px 22px 40px; }
-.container{ max-width:1100px; margin:0 auto; }
-.page-title{ text-align:center; font-size:2.2rem; margin-bottom:10px; }
-.page-sub{ text-align:center; margin-bottom:26px; color:var(--muted); }
-.grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
-.card{ background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; }
-.figure{ position:relative; aspect-ratio:16/10; background:#eee; }
-.figure img{ width:100%; height:100%; object-fit:cover; }
-.badge{ position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.8); color:#fff; padding:6px 10px; border-radius:999px; font-size:.8rem; }
-.badge.fun{ background:var(--accent); }
-.card-body{ padding:14px; display:flex; flex-direction:column; gap:10px; }
-.title{ font-weight:700; }
-.desc{ color:var(--muted); font-size:.95rem; }
-.price{ font-weight:700; }
-.price.free{ color:var(--accent); }
-.btn{ border:none; padding:10px; border-radius:10px; cursor:pointer; background:#111; color:#fff; }
-.btn:disabled{ background:#ccc; cursor:not-allowed; }
-footer{ background:rgba(0,0,0,0.8); color:#fff; padding:16px; text-align:center; }
-footer a{ color:MistyRose; text-decoration:none; margin:0 10px; }
-</style>
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .header-placeholder {
+      width: 100px; /* sorgt dafür, dass Mitte wirklich Mitte ist */
+    }
+
+    .brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.8rem;
+      font-family: 'Great Vibes', cursive;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .brand i {
+      color: var(--accent);
+      font-size: 1.8rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .coins {
+      background: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .coins i {
+      color: var(--accent);
+    }
+
+    .cart {
+      background: var(--accent);
+      color: white;
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 1rem;
+    }
+
+    .cart span {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: black;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 5px;
+      border-radius: 50%;
+    }
+
+    /* ===== HAUPTTEIL ===== */
+    main {
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      font-size: 1rem;
+    }
+
+    /* Produktkarte */
+    .product {
+      max-width: 350px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .product img {
+      width: 100%;
+      display: block;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-info h2 {
+      font-size: 1.2rem;
+      margin: 0 0 10px;
+    }
+
+    .product-info p {
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+    }
+
+    .sold-out {
+      background: #ccc;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <a class="brand" href="index.html"><i class="fas fa-heart"></i>Edin &amp; Sudenaz<i class="fas fa-heart"></i></a>
-    <div class="header-actions">
-      <div class="coins">Coins: <strong id="coins">0</strong></div>
-      <button class="cart-btn" id="openCart"><i class="fa-solid fa-cart-shopping"></i><span class="cart-count" id="cartCount">0</span></button>
-    </div>
-  </div>
-</header>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="header-inner">
+      <div class="header-placeholder"></div>
 
-<main>
-  <div class="container">
-    <h1 class="page-title">Einkaufen</h1>
-    <p class="page-sub">Nur zum Spaß – nix ist echt. Aber das Herz ist sowieso unbezahlbar. 💘</p>
-    <div class="grid">
-      <!-- Produktkarten -->
-      <div class="card">
-        <figure class="figure">
-          <img src="https://via.placeholder.com/400x250?text=Sudenaz+Herz" alt="Sudenaz Herz">
-          <span class="badge">Ausverkauft</span>
-        </figure>
-        <div class="card-body">
-          <div class="title">Sudenaz’ Herz</div>
-          <div class="desc">Unbezahlbar. Schon längst vergeben. 💝</div>
-          <div class="price">—</div>
-          <button class="btn" disabled>Ausverkauft</button>
+      <a href="#" class="brand">
+        <i class="fas fa-heart"></i>
+        Edin &amp; Sudenaz
+        <i class="fas fa-heart"></i>
+      </a>
+
+      <div class="header-actions">
+        <div class="coins">
+          <i class="fas fa-heart"></i>
+          Coins: <span id="coin-count">0</span>
         </div>
-      </div>
-
-      <div class="card">
-        <figure class="figure">
-          <img src="https://via.placeholder.com/400x250?text=Mercedes+CLS+63+AMG" alt="Mercedes CLS 63 AMG">
-        </figure>
-        <div class="card-body">
-          <div class="title">Mercedes CLS 63 AMG</div>
-          <div class="desc">V8-Blubbern für die Ohren. (nur in Träumen)</div>
-          <div class="price">189.000 €</div>
-          <button class="btn" onclick="notEnough()">In den Warenkorb</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <figure class="figure">
-          <img src="https://via.placeholder.com/400x250?text=Yuno" alt="Yuno">
-          <span class="badge">Ausverkauft</span>
-        </figure>
-        <div class="card-body">
-          <div class="title">Yuno</div>
-          <div class="desc">Charakter mit Attitude. Limitierte Edition.</div>
-          <div class="price">500 €</div>
-          <button class="btn" disabled>Ausverkauft</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <figure class="figure">
-          <img src="https://via.placeholder.com/400x250?text=Geschenk-Auto" alt="Geschenk Auto">
-          <span class="badge fun">Geschenk</span>
-        </figure>
-        <div class="card-body">
-          <div class="title">Auto (Name folgt)</div>
-          <div class="desc">Dein Geschenk – kostet 0 €. 🎁</div>
-          <div class="price free">0 €</div>
-          <button class="btn" onclick="addToCart('Auto (Name folgt)', 0)">In den Warenkorb</button>
+        <div class="cart">
+          <span id="cart-count">0</span>
+          <i class="fas fa-shopping-cart"></i>
         </div>
       </div>
     </div>
-  </div>
-</main>
+  </header>
 
-<footer>
-  <a href="entdecken.html">Entdecken</a> | 
-  <a href="einkaufen.html">Einkaufen</a> |
-  <a href="kontaktieren.html">Kontaktieren</a>
-</footer>
+  <!-- ===== INHALT ===== -->
+  <main>
+    <h1>Einkaufen</h1>
+    <p>Nur zum Spaß – nix ist echt. Aber das Herz ist sowieso unbezahlbar. 💘</p>
 
-<script>
-let cartCount = 0;
-function notEnough(){
-  alert('Sie haben nicht genug Coins.');
-}
-function addToCart(name, price){
-  cartCount++;
-  document.getElementById('cartCount').textContent = cartCount;
-  alert(`${name} wurde in den Warenkorb gelegt!`);
-}
-</script>
+    <div class="product">
+      <img src="dein-bild.jpg" alt="Sudenez Herz">
+      <div class="product-info">
+        <h2>Sudenaz’ Herz</h2>
+        <p>Unbezahlbar. Schon längst vergeben. 💖</p>
+        <button class="sold-out">Ausverkauft</button>
+      </div>
+    </div>
+  </main>
 
 </body>
 </html>
