@@ -45,7 +45,7 @@ header{
   margin: 0 auto;
   padding: 14px 18px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; /* Coins + Warenkorb rechts */
   align-items: center;
   position: relative;
 }
@@ -54,10 +54,18 @@ header{
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.6rem;
+  font-family: 'Great Vibes', cursive;
+  color: var(--accent);
+  text-decoration: none;
 }
 
 }
-.brand i{ color:var(--accent); }
+.brand i{ color:var(--accent);
+          font-size: 1.6rem;}
 .header-actions{ justify-self:end; display:flex; gap:14px; align-items:center; }
 .coins{ background:#fff; padding:6px 10px; border-radius:999px; box-shadow:var(--shadow); font-size:.95rem; }
 .cart-btn{ position:relative; border:none; background:var(--accent); color:#fff; padding:10px 14px; border-radius:999px; cursor:pointer; box-shadow:var(--shadow); }
