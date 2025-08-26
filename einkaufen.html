@@ -60,9 +60,9 @@ header{
 
 .coin-display i {
   position: relative;
-  top: 2px;            /* leicht nach unten schieben (evtl. mit -2px nach oben testen) */
-  font-size: 0.9em;    /* gleiche Höhe wie Text */
-  line-height: 1;      /* verhindert zusätzliche Abstände */
+  top: 2px;
+  font-size: 0.9em;
+  line-height: 1;
 }
 
   
@@ -216,15 +216,49 @@ footer a:hover {
 </footer>
 
 <script>
-let cartCount = 0;
+// Warenkorb aus localStorage laden
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+updateCartCount();
+
 function notEnough(){
   alert('Sie haben nicht genug Coins.');
 }
+
 function addToCart(name, price){
-  cartCount++;
-  document.getElementById('cartCount').textContent = cartCount;
+  cart.push({name, price});
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
   alert(`${name} wurde in den Warenkorb gelegt!`);
 }
+
+function updateCartCount(){
+  document.getElementById('cartCount').textContent = cart.length;
+}
+
+// Button leitet zum Warenkorb weiter
+document.getElementById("openCart").addEventListener("click", () => {
+  window.location.href = "warenkorb.html";
+});
+
+// Ausverkaufte Artikel prüfen
+let sold = JSON.parse(localStorage.getItem("sold")) || [];
+sold.forEach(name=>{
+  let buttons = document.querySelectorAll("button");
+  buttons.forEach(btn=>{
+    if(btn.getAttribute("onclick")?.includes(name)){
+      btn.disabled = true;
+      btn.textContent = "Ausverkauft";
+      btn.closest(".card").querySelector(".badge")?.remove();
+      let figure = btn.closest(".card").querySelector(".figure");
+      if(figure && !figure.querySelector(".badge")){
+        let span = document.createElement("span");
+        span.className = "badge";
+        span.textContent = "Ausverkauft";
+        figure.appendChild(span);
+      }
+    }
+  });
+});
 </script>
 
 </body>
