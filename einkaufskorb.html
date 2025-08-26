@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Warenkorb – Edin & Sudenaz</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+  --bg:snow;
+  --text:#111;
+  --muted:#555;
+  --accent:#8b0000;
+  --card:#fff;
+  --shadow:0 8px 24px rgba(0,0,0,.08);
+  --radius:14px;
+}
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Times New Roman", serif;
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+}
+header{ background:var(--bg); box-shadow:0 2px 12px rgba(0,0,0,.06); padding:14px; text-align:center; font-family:'Great Vibes', cursive; font-size:1.6rem; color:var(--accent);}
+main{ flex:1; padding:120px 22px 40px; max-width:800px; margin:0 auto; }
+h1{text-align:center;}
+.cart-item{background:var(--card); box-shadow:var(--shadow); border-radius:var(--radius); padding:14px; margin-bottom:14px;}
+.btn{background:var(--accent); color:#fff; border:none; padding:10px 14px; border-radius:10px; cursor:pointer;}
+.btn:disabled{background:#ccc;cursor:not-allowed;}
+footer{ background:snow; color:black; padding:16px; text-align:center; }
+footer a{ color:#8b0000; text-decoration:none; margin:0 10px; }
+footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <i class="fas fa-heart"></i> Edin &amp; Sudenaz <i class="fas fa-heart"></i>
+</header>
+
+<main>
+  <h1>Dein Warenkorb</h1>
+  <div id="cartItems"></div>
+  <button class="btn" id="buyBtn">Kaufen</button>
+</main>
+
+<footer>
+  <a href="entdecken.html">Entdecken</a> | 
+  <a href="einkaufen.html">Einkaufen</a> |
+  <a href="kontaktieren.html">Kontaktieren</a>
+</footer>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartItemsDiv = document.getElementById("cartItems");
+
+if(cart.length === 0){
+  cartItemsDiv.innerHTML = "<p>Dein Warenkorb ist leer.</p>";
+  document.getElementById("buyBtn").disabled = true;
+} else {
+  cart.forEach(item=>{
+    let div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `<strong>${item.name}</strong> – ${item.price} Coins`;
+    cartItemsDiv.appendChild(div);
+  });
+}
+
+document.getElementById("buyBtn").addEventListener("click", ()=>{
+  // Gekaufte Artikel als "ausverkauft" speichern
+  let sold = JSON.parse(localStorage.getItem("sold")) || [];
+  sold = sold.concat(cart.map(i=>i.name));
+  localStorage.setItem("sold", JSON.stringify(sold));
+  
+  // Warenkorb leeren
+  cart = [];
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("Danke für deinen Einkauf! Die Artikel sind nun ausverkauft.");
+  window.location.href = "einkaufen.html";
+});
+</script>
+
+</body>
+</html>
 
